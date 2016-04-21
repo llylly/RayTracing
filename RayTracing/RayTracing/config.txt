@@ -1,0 +1,6 @@
+//Config Resolution
+Resolution = 800 x 600
+
+//Config AntiAnalising: 3x3
+AntiAnalisingOn = 1
+AntiAnalisingFactor = 3

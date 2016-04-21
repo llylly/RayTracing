@@ -18,5 +18,36 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="RayTracer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigReader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RayTracer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="config.txt">
+      <Filter>资源文件</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -1,13 +1,21 @@
-﻿生成启动时间为 2016/4/17 19:30:41。
-     1>项目“I:\大二下\圖形學\rayTracing\RayTracing\RayTracing\RayTracing.vcxproj”在节点 2 上(Build 个目标)。
+﻿生成启动时间为 2016/4/22 2:02:46。
+     1>项目“I:\graphics\rayTracing\RayTracing\RayTracing\RayTracing.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
-         main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ConfigReader.cpp
+         ConfigReader.cpp
+     1>i:\graphics\raytracing\raytracing\raytracing\configreader.cpp(38): warning C4018: “<”: 有符号/无符号不匹配
+     1>i:\graphics\raytracing\raytracing\raytracing\configreader.cpp(45): warning C4018: “<”: 有符号/无符号不匹配
+     1>i:\graphics\raytracing\raytracing\raytracing\configreader.cpp(91): warning C4018: “<”: 有符号/无符号不匹配
+     1>i:\graphics\raytracing\raytracing\raytracing\configreader.cpp(101): warning C4018: “<”: 有符号/无符号不匹配
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"I:\大二下\圖形學\rayTracing\RayTracing\Debug\RayTracing.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"I:\大二下\圖形學\rayTracing\RayTracing\Debug\RayTracing.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"I:\大二下\圖形學\rayTracing\RayTracing\Debug\RayTracing.lib" /MACHINE:X86 Debug\main.obj
-         RayTracing.vcxproj -> I:\大二下\圖形學\rayTracing\RayTracing\Debug\RayTracing.exe
-     1>已完成生成项目“I:\大二下\圖形學\rayTracing\RayTracing\RayTracing\RayTracing.vcxproj”(Build 个目标)的操作。
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"I:\graphics\rayTracing\RayTracing\Debug\RayTracing.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"I:\graphics\rayTracing\RayTracing\Debug\RayTracing.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"I:\graphics\rayTracing\RayTracing\Debug\RayTracing.lib" /MACHINE:X86 Debug\Config.obj
+         Debug\ConfigReader.obj
+         Debug\Image.obj
+         Debug\main.obj
+         Debug\RayTracer.obj
+         RayTracing.vcxproj -> I:\graphics\rayTracing\RayTracing\Debug\RayTracing.exe
+     1>已完成生成项目“I:\graphics\rayTracing\RayTracing\RayTracing\RayTracing.vcxproj”(Build 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:04.88
+已用时间 00:00:03.22
