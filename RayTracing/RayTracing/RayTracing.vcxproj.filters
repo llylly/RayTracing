@@ -30,6 +30,15 @@
     <ClCompile Include="Image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BMP.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RayTracer.h">
@@ -42,6 +51,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BMP.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

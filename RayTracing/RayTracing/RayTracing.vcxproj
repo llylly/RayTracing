@@ -38,7 +38,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -46,6 +46,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -62,16 +63,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BMP.cpp" />
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ConfigReader.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="RayTracer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BMP.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigReader.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="RayTracer.h" />
   </ItemGroup>
   <ItemGroup>

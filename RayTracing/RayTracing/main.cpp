@@ -7,9 +7,9 @@ using namespace std;
 string configIn = "config.txt";
 string imageOut = "result.bmp";
 
-
-int main() {
+int main(int argc, char **argv) {
 	RayTracer* mainTracer = new RayTracer(configIn, imageOut);
-	while(1);
+	mainTracer->run();
+	mainTracer->save();
 	return 0;
 }

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -14,10 +15,11 @@ public:
 
 	Config();
 	~Config();
-	void addObject(const map<string, string> &conf);
+	void addObjectConf(const map<string, string> &conf);
+	const vector<map<string, string>> &getObjectConf();
 
 private:
-
+	vector<map<string, string>> *objSet;
 };
 
 #endif

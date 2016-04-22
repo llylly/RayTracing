@@ -30,7 +30,7 @@ Config* ConfigReader::readConfig() {
 		}
 		if (now.find("}") != -1) {
 			inObjectBody = false;
-			config->addObject(objConf);
+			config->addObjectConf(objConf);
 			continue;
 		}
 		if (now.find("=") != -1) {

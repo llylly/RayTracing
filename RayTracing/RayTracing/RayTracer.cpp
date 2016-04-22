@@ -22,6 +22,7 @@ RayTracer::RayTracer(string configIn, string imageOut) {
 
 	//setting image
 	image = new Image(imageOut, config);
+	image->spaceInit();
 
 }
 
@@ -34,5 +35,6 @@ void RayTracer::run() {
 }
 
 void RayTracer::save() {
+	image->antiAnalising();
 	image->save();
 }
