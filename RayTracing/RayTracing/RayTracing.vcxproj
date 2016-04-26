@@ -64,25 +64,46 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BMP.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ConfigReader.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightFactory.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
+    <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RayTracer.cpp" />
+    <ClCompile Include="RenderView.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BMP.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigReader.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="LightFactory.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectFactory.h" />
+    <ClInclude Include="Plane.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="RayTracer.h" />
+    <ClInclude Include="RenderView.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,39 @@
 //Config Resolution
 Resolution = 800 x 600
 
-//Config AntiAnalising: 3x3
-AntiAnalisingOn = 1
-AntiAnalisingFactor = 3
+//Config AntiAliasing: 3x3
+AntiAliasingOn = 1
+AntiAliasingFactor = 1
+
+//config display
+DisplayOn = 0
+
+//config camera
+Camera {
+	EyePosition = 0.0 0.0 1.0
+	Position = 0.0 0.0 0.0
+	XLength = 1.0
+	Orient = 0.0 1.0 0.0
+}
+
+//config light
+Light {
+	Type = Point
+	Position = 1.0 5.0 -5.0
+}
+
+//config objects
+Object {
+	Type = Sphere
+	Position = -2.0 0.0 0.0
+	Radius = 1.0
+	Color = 255 123 241
+	AbsorbFactor = 0.5
+	ReflectFactor = 0.5
+}
+
+Object {
+	Type = Plane
+	Normal = 0.0 1.0 0.0
+	Point = 0.0 -1.0 0.0
+}

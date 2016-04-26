@@ -3,7 +3,7 @@
 Image::Image() {
 	//default confuguration
 	width = height = 300;
-	antiAnalisingFactor = 3;
+	antiAliasingFactor = 3;
 	Rwidth = Rheight = 900;
 	outFilePath = "output.bmp";
 	arr = 0;
@@ -12,12 +12,12 @@ Image::Image() {
 Image::Image(string _outFilePath, Config *config) {
 	width = config->resolutionWidth;
 	height = config->resolutionHeight;
-	if (config->antiAnalising)
-		antiAnalisingFactor = config->antiAnalisingFactor;
+	if (config->antiAliasing)
+		antiAliasingFactor = config->antiAliasingFactor;
 	else
-		antiAnalisingFactor = 1;
-	Rwidth = width * antiAnalisingFactor;
-	Rheight = height * antiAnalisingFactor;
+		antiAliasingFactor = 1;
+	Rwidth = width * antiAliasingFactor;
+	Rheight = height * antiAliasingFactor;
 	outFilePath = _outFilePath;
 	arr = 0;
 }
@@ -71,13 +71,13 @@ void Image::save() {
 		int lineData = 3 * width;
 		totSize += lineData;
 		for (int j=0; j<width; j++) {
-			int tr = arr[i][j].R * 256.0 - 0.50;
+			int tr = arr[i][j].B * 256.0 - 0.50;
 			tr = (tr<0)?0:tr;
 			fout.put((char)tr);
 			tr = arr[i][j].G * 256.0 - 0.50;
 			tr = (tr<0)?0:tr;
 			fout.put((char)tr);
-			tr = arr[i][j].B * 256.0 - 0.50;
+			tr = arr[i][j].R * 256.0 - 0.50;
 			tr = (tr<0)?0:tr;
 			fout.put((char)tr);
 		}
@@ -97,7 +97,7 @@ void Image::save() {
 }
 
 void Image::set(const Color &c, int x, int y) {
-	arr[x][y] = c;
+	arr[y][x] = c;
 }
 
 int Image::Width() {
@@ -108,26 +108,26 @@ int Image::Height() {
 	return Rheight;
 }
 
-void Image::antiAnalising() {
-	if (antiAnalisingFactor == 1) return;
-	double **vmap = new double*[antiAnalisingFactor];
+void Image::antiAliasing() {
+	if (antiAliasingFactor == 1) return;
+	double **vmap = new double*[antiAliasingFactor];
 	double mapSum = 0.0f;
-	for (int i=0; i<antiAnalisingFactor; i++)
-		vmap[i] = new double[antiAnalisingFactor];
+	for (int i=0; i<antiAliasingFactor; i++)
+		vmap[i] = new double[antiAliasingFactor];
 	
 	double x = 0.5f, y = 0.5f;
-	for (int i=0; i<antiAnalisingFactor; i++) {
-		if (i*2<antiAnalisingFactor) x*=2.0f;
-		if (i*2>antiAnalisingFactor) x/=2.0f;
+	for (int i=0; i<antiAliasingFactor; i++) {
+		if (i*2<antiAliasingFactor) x*=2.0f;
+		if (i*2>antiAliasingFactor) x/=2.0f;
 		y = 0.5f;
-		for (int j=0; j<antiAnalisingFactor; j++) {
-			if (j*2<antiAnalisingFactor) y*=2.0f;
-			if (j*2>antiAnalisingFactor) y/=2.0f;
+		for (int j=0; j<antiAliasingFactor; j++) {
+			if (j*2<antiAliasingFactor) y*=2.0f;
+			if (j*2>antiAliasingFactor) y/=2.0f;
 			vmap[i][j] = x*y, mapSum += vmap[i][j];
 		}
 	}
-	for (int i=0; i<antiAnalisingFactor; i++)
-		for (int j=0; j<antiAnalisingFactor; j++)
+	for (int i=0; i<antiAliasingFactor; i++)
+		for (int j=0; j<antiAliasingFactor; j++)
 			vmap[i][j]/=mapSum;
 
 	Color **newArr = new Color*[height];
@@ -137,9 +137,9 @@ void Image::antiAnalising() {
 	for (int i=0; i<height; i++)
 		for (int j=0; j<width; j++) {
 			tmp.set(0.0, 0.0, 0.0);
-			for (int ii=0; ii<antiAnalisingFactor; ii++)
-				for (int jj=0; jj<antiAnalisingFactor; jj++)
-					tmp+=(arr[i*antiAnalisingFactor + ii][j*antiAnalisingFactor + jj] * vmap[ii][jj]);
+			for (int ii=0; ii<antiAliasingFactor; ii++)
+				for (int jj=0; jj<antiAliasingFactor; jj++)
+					tmp+=(arr[i*antiAliasingFactor + ii][j*antiAliasingFactor + jj] * vmap[ii][jj]);
 			newArr[i][j] = tmp;
 		}
 
@@ -150,7 +150,11 @@ void Image::antiAnalising() {
 	for (int i=0; i<height; i++)
 		arr[i] = newArr[i];
 	delete[] newArr;
-	for (int i=0; i<antiAnalisingFactor; i++)
+	for (int i=0; i<antiAliasingFactor; i++)
 		delete[] vmap[i];
 	delete[] vmap;
+}
+
+Color Image::get(int x, int y) {
+	return arr[y][x];
 }

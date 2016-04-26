@@ -14,8 +14,8 @@ ConfigReader::ConfigReader(string path, Config *config) {
 Config* ConfigReader::readConfig() {
 
 	ifstream fin(filePath);
-	bool inObjectBody = false;
-	map<string, string> objConf;
+	bool inObjectBody = false, inCameraBody = false, inLightBody = false;
+	map<string, string> objConf, cameraConf, lightConf;
 
 	while (!fin.eof()) {
 		string now, leftValue, rightValue;
@@ -23,14 +23,30 @@ Config* ConfigReader::readConfig() {
 		if (now.find("//") != -1) {
 			continue;
 		}
-		if ((now.find("object") != -1) && (now.find("{") != -1)) {
+		if ((now.find("Object") != -1) && (now.find("{") != -1)) {
 			inObjectBody = true;
 			objConf.clear();
 			continue;
 		}
+		if ((now.find("Camera") != -1) && (now.find("{") != -1)) {
+			inCameraBody = true;
+			cameraConf.clear();
+		}
+		if ((now.find("Light") != -1) && (now.find("{") != -1)) {
+			inLightBody = true;
+			lightConf.clear();
+		}
 		if (now.find("}") != -1) {
-			inObjectBody = false;
-			config->addObjectConf(objConf);
+			if (inObjectBody) {
+				inObjectBody = false;
+				config->addObjectConf(objConf);
+			}
+			if (inCameraBody) 
+				inCameraBody = false;
+			if (inLightBody) {
+				inLightBody = false;
+				config->addLightConf(lightConf);
+			}
 			continue;
 		}
 		if (now.find("=") != -1) {
@@ -38,12 +54,12 @@ Config* ConfigReader::readConfig() {
 			for (int i=0; i<now.find("="); i++) {
 				if ((i) && (now[i] != ' ') && (now[i-1] == ' '))
 					leftValue = "";
-				if (now[i]!=' ') 
+				if (now[i] > 32) 
 					leftValue.append(1, now[i]);
 			}
 			int l = now.find("=") + 1, r= now.length() - 1;
-			while ((now[l] == ' ') && (l < now.length())) ++l;
-			while ((now[r] == ' ') && (l <= r)) --r;
+			while ((now[l] <= 32) && (l < now.length())) ++l;
+			while ((now[r] <= 32) && (l <= r)) --r;
 			if (l <= r)
 				rightValue = now.substr(l, r-l+1);
 			else 
@@ -51,13 +67,17 @@ Config* ConfigReader::readConfig() {
 			
 			if (inObjectBody)
 				objConf[leftValue] = rightValue;
+			else if (inCameraBody)
+				cameraConf[leftValue] = rightValue;
+			else if (inLightBody)
+				lightConf[leftValue] = rightValue;
 			else
 				readItem(leftValue, rightValue);
 
 		}
 	}
 	fin.close();
-
+	config->setCameraConf(cameraConf);
 	return this->config;
 }
 
@@ -67,13 +87,13 @@ void ConfigReader::readItem(const string& name, const string &value) {
 		string sWidth = "", sHeight = "";
 		
 		l = 0, r = epos - 1;
-		while ((value[l] == ' ') && (l<=r)) ++l;
-		while ((value[r] == ' ') && (l<=r)) --r;
+		while ((value[l] <= 32) && (l<=r)) ++l;
+		while ((value[r] <= 32) && (l<=r)) --r;
 		if (l<=r) sWidth = value.substr(l, r-l+1);
 
 		l = epos + 1, r = value.length() - 1;
-		while ((value[l] == ' ') && (l<=r)) ++l;
-		while ((value[r] == ' ') && (l<=r)) --r;
+		while ((value[l] <= 32) && (l<=r)) ++l;
+		while ((value[r] <= 32) && (l<=r)) --r;
 		if (l<=r) sHeight= value.substr(l, r-l+1);
 
 		if (sWidth != "")
@@ -86,23 +106,31 @@ void ConfigReader::readItem(const string& name, const string &value) {
 		else
 			config->resolutionHeight = 300; //default configuration
 	}
-	if (name == "AntiAnalisingOn") {
+	if (name == "AntiAliasingOn") {
 		char able = '0';
 		for (int i=0; i<value.length(); i++)
 			if ((value[i] >= '0') && (value[i] <= '9'))
 				able = value[i];
 		if (able == '0') 
-			config->antiAnalising = false;
+			config->antiAliasing = false;
 		else
-			config->antiAnalising = true;
+			config->antiAliasing = true;
 	}
-	if (name == "AntiAnalisingFactor") {
+	if (name == "AntiAliasingFactor") {
 		int num = 0;
 		for (int i=0; i<value.length(); i++)
 			if ((value[i] >= '0') && (value[i] <= '9'))
 				num = num * 10 + value[i] - '0';
-		config->antiAnalisingFactor = num;
+		config->antiAliasingFactor = num;
 	}
-	if (name == "CameraPos") {
+	if (name == "DisplayOn") {
+				char able = '0';
+		for (int i=0; i<value.length(); i++)
+			if ((value[i] >= '0') && (value[i] <= '9'))
+				able = value[i];
+		if (able == '0') 
+			config->displayOn = false;
+		else
+			config->displayOn = true;
 	}
 }

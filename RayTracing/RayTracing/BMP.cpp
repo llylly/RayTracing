@@ -56,11 +56,11 @@ void BMP::open(string _path) {
 		int lineTot = width * ((digit==24)?3:4);
 		while (1) {
 			nowc = fin.get();
-			arr[i][j].R = (double)(nowc<0?256+nowc:nowc) / 255.0;
+			arr[i][j].B = (double)(nowc<0?256+nowc:nowc) / 255.0;
 			nowc = fin.get();
 			arr[i][j].G = (double)(nowc<0?256+nowc:nowc) / 255.0;
 			nowc = fin.get();
-			arr[i][j].B = (double)(nowc<0?256+nowc:nowc) / 255.0;
+			arr[i][j].R = (double)(nowc<0?256+nowc:nowc) / 255.0;
 			if (digit!=24)
 				nowc = fin.get();
 			if (toned) --j; else ++j;

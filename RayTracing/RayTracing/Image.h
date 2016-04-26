@@ -16,14 +16,15 @@ public:
 	~Image();
 	void save();
 	void spaceInit();
-	void antiAnalising();
+	void antiAliasing();
 	void set(const Color&, int, int);
+	Color get(int x, int y);
 	int Width();
 	int Height();
 
 private:
 	int width, height, Rwidth, Rheight;
-	int antiAnalisingFactor;
+	int antiAliasingFactor;
 	string outFilePath;
 	Color **arr;
 
