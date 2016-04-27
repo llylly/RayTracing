@@ -51,9 +51,8 @@ Vector &operator-=(Vector &a, const Vector &b) {
 	return a;
 }
 
-Vector dot(const Vector &a, const Vector &b) {
-	Vector n(a.x * b.x, a.y * b.y, a.z * b.z);
-	return n;
+double dot(const Vector &a, const Vector &b) {
+	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 Vector cross(const Vector &a, const Vector &b) {
@@ -74,4 +73,16 @@ Vector normalize(const Vector &v, double toLen) {
 ostream &operator<<(ostream &outS, const Vector &a) {
 	outS<<"("<<a.x<<", "<<a.y<<", "<<a.z<<")";
 	return outS;
+}
+
+double getDistance(const Vector &a, const Vector &b) {
+	return getLength(a - b);
+}
+
+double getDistance2(const Vector &a, const Vector &b) {
+	return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z);
+}
+
+Vector operator-(const Vector &a) {
+	return Vector(-a.x, -a.y, -a.z);
 }

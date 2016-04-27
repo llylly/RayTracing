@@ -13,6 +13,7 @@ public:
 	bool antiAliasing;
 	int antiAliasingFactor;
 	bool displayOn;
+	double limitCoefficient;
 
 	Config();
 	~Config();

@@ -1,5 +1,7 @@
 #define DEBUG
 
+#define MAXINF 1e+20
+#define EPS 1e-4
 #include <string>
 #include <iostream>
 #include "RayTracer.h"
@@ -74,10 +76,75 @@ bool RayTracer::getDisplayOn() {
 }
 
 void RayTracer::run() {
-	for (int i=0; i<400; i++)
-		for (int j=0; j<300; j++) {
-			image->set(Color((float)(rand())/(float)RAND_MAX, (float)(rand())/(float)RAND_MAX, (float)(rand())/(float)RAND_MAX), i, j);
-			if (config->displayOn)
-				RenderView::imgDisplay(image, i, j);
+	double kX, kY;
+	Vector half, origin = camera->center, direction;
+	Ray nowRay;
+
+	for (int i=0; i<getRenderHeight(); ++i) {
+		cerr<<i<<endl;
+		kY = 1.0f - 2.0f * (double)i / (double)getRenderHeight();
+		half = origin - camera->eye - kY * camera->yDirec;
+		for (int j=0; j<getRenderWidth(); ++j) {
+			kX = 1.0f - 2.0f * (double)j / (double)getRenderWidth();
+			direction = half - kX * camera->xDirec;
+			nowRay = Ray(origin, normalize(direction));
+			image->set(work(nowRay), j, i);
+			if (config->displayOn) RenderView::imgDisplay(image, j, i);
 		}
+	}
+}
+
+Color RayTracer::work(const Ray& r, double co) {
+	if (co < config->limitCoefficient) return Color(0.0f, 0.0f, 0.0f);
+
+	Vector nowCrossPoint, totCrossPoint, secondTotCrossPoint;
+	Object *selected = nullptr, *secondSelected = nullptr;
+	double minDis = MAXINF, secondMinDis = MAXINF;
+	for (vector<Object*>::iterator i = objects.begin(); i != objects.end(); i++) {
+		if ((*i)->intercept(r, nowCrossPoint)) {
+			if (getDistance2(r.origin, nowCrossPoint) < minDis) {
+				secondMinDis = minDis;
+				secondSelected = selected;
+				secondTotCrossPoint = totCrossPoint;
+				minDis = getDistance2(r.origin, nowCrossPoint);
+				selected = *i;
+				totCrossPoint = nowCrossPoint;
+			} else if (getDistance2(r.origin, nowCrossPoint) < secondMinDis) {
+				secondMinDis = getDistance2(r.origin, nowCrossPoint);
+				secondSelected = *i;
+				secondTotCrossPoint = nowCrossPoint;
+			}
+		}
+	}
+	if ((secondSelected) && (minDis <= EPS)) {
+		minDis = secondMinDis, selected = secondSelected, totCrossPoint = secondTotCrossPoint;
+	}
+
+	Color ans = Color(0.0f, 0.0f, 0.0f);
+
+	if (selected != nullptr) {
+		// have intercept point
+		ans = selected->work(this, r, totCrossPoint, co);
+	} else {
+		// calculate only light source
+		for (vector<Light*>::iterator i = lights.begin(); i != lights.end(); i++) 
+			ans += (*i)->haloColor(r);
+	}
+
+	return ans;
+}
+
+bool RayTracer::collide(const Vector &S, const Vector &T) {
+	Ray r(S, normalize(T-S));
+	double minDis = MAXINF;
+	Vector nowCrossPoint;
+	for (vector<Object*>::iterator i = objects.begin(); i != objects.end(); i++) {
+		if ((*i)->intercept(r, nowCrossPoint)) 
+			if (getDistance2(S, nowCrossPoint) < minDis) 
+				minDis= getDistance2(r.origin, nowCrossPoint);
+	}
+	if ((minDis > EPS) && (getDistance2(S, T) - minDis > EPS))
+		return true;
+	else
+		return false;
 }

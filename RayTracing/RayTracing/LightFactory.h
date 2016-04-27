@@ -7,6 +7,7 @@
 #include "Vector.h"
 #include "Light.h"
 #include "PointLight.h"
+#include "Color.h"
 
 using namespace std;
 

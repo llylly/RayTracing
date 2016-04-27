@@ -30,7 +30,7 @@ Vector operator-(const Vector&, const Vector&);
 
 Vector &operator-=(Vector&, const Vector&);
 
-Vector dot(const Vector&, const Vector&);
+double dot(const Vector&, const Vector&);
 
 Vector cross(const Vector&, const Vector&);
 
@@ -39,5 +39,11 @@ double getLength(const Vector&);
 Vector normalize(const Vector &v, double toLen = 1.0);
 
 ostream &operator<<(ostream &outS, const Vector&);
+
+double getDistance(const Vector&, const Vector&);
+
+double getDistance2(const Vector&, const Vector&);
+
+Vector operator-(const Vector&);
 
 #endif

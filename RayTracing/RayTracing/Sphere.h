@@ -4,17 +4,24 @@
 #include "Color.h"
 #include "Vector.h"
 #include "Object.h"
+#include "Ray.h"
 
 class Sphere : public Object {
 public:
-	Vector position;
-	Color bgColor;
 	double radius;
-	double absorbFactor, reflectFactor;
 
 	Sphere();
-	Sphere(Vector _position, Color _bgColor, double _radius, double _absorbFactor, double _reflectFactor);
+	Sphere(Vector _position, Color _bgColor, double _radius, 
+		double _diffuseFactor, double _specularFactor, int _specularPower, 
+		double _reflectFactor, double _environmentFactor);
 	~Sphere();
+
+	bool intercept(const Ray&, Vector&) override;
+
+private:
+	bool getNormal(const Vector&, Vector&) override;
+
+	friend Object;
 };
 
 #endif

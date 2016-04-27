@@ -1,7 +1,9 @@
 ------CAMERA------
-Eye: (0, 0, 1)
-Center: (0, 0, 0)
+Eye: (0, 1, 1)
+Center: (0, 1, 0)
 XVector: (0.5, -0, 0)
-YVector: (0, 0.375, 0)
+YVector: (0, 0.28125, 0)
 ------------------
 
+Begin~
+Finish~

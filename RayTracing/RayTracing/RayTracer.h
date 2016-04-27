@@ -12,18 +12,22 @@
 #include "Object.h"
 #include "LightFactory.h"
 #include "Light.h"
+#include "Ray.h"
 
 using namespace std;
 
 struct RayTracer {
 public:
 	string configIn, imageOut;
+	vector<Light*> lights;
 
 	RayTracer();
 	RayTracer(string configIn, string imageOut);
 	~RayTracer();
 	void run();
 	void save();
+	Color work(const Ray&, double co = 1.0f);
+	bool collide(const Vector&, const Vector&);
 
 	int getRenderWidth();
 	int getRenderHeight();
@@ -34,6 +38,5 @@ private:
 	Image *image;
 	Camera *camera;
 	vector<Object*> objects;
-	vector<Light*> lights;
 };
 #endif
