@@ -19,8 +19,15 @@ Camera {
 //config light
 Light {
 	Type = Point
-	Position = 0.0 5.0 0.0
+	Position = 1.0 5.0 0.0
 	Color = 255 255 255
+	HaloFactor = 12
+}
+
+Light {
+	Type = Point
+	Position = -4.0 5.0 -12.0
+	Color = 255 174 201
 	HaloFactor = 12
 }
 
@@ -62,30 +69,33 @@ Object {
 	ReflectFactor = 0.2
 }
 
+// ground
 Object {
 	Type = Plane
 	Normal = 0.0 1.0 0.0
 	Position = 0.0 -1.0 0.0
-	Color = 0 0 0
-	EnvironmentFactor = 0.1
-	DiffuseFactor = 0.3
-	SpecularFactor = 0.2
+	Color = 255 255 255
+	EnvironmentFactor = 0.2
+	DiffuseFactor = 0.5
+	SpecularFactor = 0.3
 	SpecularPower = 30
-	ReflectFactor = 0.5
+	ReflectFactor = 0.2
 }
 
+// back wall
 Object {
 	Type = Plane
 	Normal = 0.0 0.0 1.0
 	Position = 0.0 0.0 -20.0
 	Color = 0 255 255
-	EnvironmentFactor = 0.1
-	DiffuseFactor = 0.6
-	SpecularFactor = 0.4
+	EnvironmentFactor = 0.0
+	DiffuseFactor = 0.5
+	SpecularFactor = 0.3
 	SpecularPower = 30
-	ReflectFactor = 0.0
+	ReflectFactor = 0.2
 }
 
+// left ground
 Object {
 	Type = Plane
 	Normal = 1.0 0.0 0.0
@@ -98,6 +108,7 @@ Object {
 	ReflectFactor = 0.0
 }
 
+// right ground
 Object {
 	Type = Plane
 	Normal = -1.0 0.0 0.0
@@ -110,6 +121,7 @@ Object {
 	ReflectFactor = 0.0
 }
 
+// ceiling
 Object {
 	Type = Plane
 	Normal = 0.0 -1.0 0.0
@@ -117,17 +129,18 @@ Object {
 	Color = 255 255 255
 	EnvironmentFactor = 0.1
 	DiffuseFactor = 0.6
-	SpecularFactor = 0.4
+	SpecularFactor = 0.2
 	SpecularPower = 30
-	ReflectFactor = 0.0
+	ReflectFactor = 0.2
 }
 
+// front wall
 Object {
 	Type = Plane
 	Normal = 0.0 0.0 -1.0
 	Position = 0.0 0.0 5.0
 	Color = 255 255 255
-	EnvironmentFactor = 0.1
+	EnvironmentFactor = 0.0
 	DiffuseFactor = 0.6
 	SpecularFactor = 0.4
 	SpecularPower = 30

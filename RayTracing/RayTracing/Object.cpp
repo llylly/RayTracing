@@ -1,4 +1,4 @@
-#define EPS 1e-4
+#define EPS 1e-6
 
 #include "Object.h"
 #include "Sphere.h"

@@ -1,7 +1,7 @@
 #define DEBUG
 
 #define MAXINF 1e+20
-#define EPS 1e-4
+#define EPS 1e-6
 #include <string>
 #include <iostream>
 #include "RayTracer.h"
@@ -97,27 +97,17 @@ void RayTracer::run() {
 Color RayTracer::work(const Ray& r, double co) {
 	if (co < config->limitCoefficient) return Color(0.0f, 0.0f, 0.0f);
 
-	Vector nowCrossPoint, totCrossPoint, secondTotCrossPoint;
-	Object *selected = nullptr, *secondSelected = nullptr;
-	double minDis = MAXINF, secondMinDis = MAXINF;
+	Object *selected = nullptr;
+	double minDis = MAXINF;
+	Vector nowCrossPoint, totCrossPoint;
 	for (vector<Object*>::iterator i = objects.begin(); i != objects.end(); i++) {
 		if ((*i)->intercept(r, nowCrossPoint)) {
-			if (getDistance2(r.origin, nowCrossPoint) < minDis) {
-				secondMinDis = minDis;
-				secondSelected = selected;
-				secondTotCrossPoint = totCrossPoint;
+			if ((getDistance2(r.origin, nowCrossPoint) < minDis) && (getDistance2(r.origin, nowCrossPoint) > EPS)) {
 				minDis = getDistance2(r.origin, nowCrossPoint);
 				selected = *i;
 				totCrossPoint = nowCrossPoint;
-			} else if (getDistance2(r.origin, nowCrossPoint) < secondMinDis) {
-				secondMinDis = getDistance2(r.origin, nowCrossPoint);
-				secondSelected = *i;
-				secondTotCrossPoint = nowCrossPoint;
 			}
 		}
-	}
-	if ((secondSelected) && (minDis <= EPS)) {
-		minDis = secondMinDis, selected = secondSelected, totCrossPoint = secondTotCrossPoint;
 	}
 
 	Color ans = Color(0.0f, 0.0f, 0.0f);
@@ -139,11 +129,12 @@ bool RayTracer::collide(const Vector &S, const Vector &T) {
 	double minDis = MAXINF;
 	Vector nowCrossPoint;
 	for (vector<Object*>::iterator i = objects.begin(); i != objects.end(); i++) {
-		if ((*i)->intercept(r, nowCrossPoint)) 
-			if (getDistance2(S, nowCrossPoint) < minDis) 
+		if ((*i)->intercept(r, nowCrossPoint)) {
+			if ((getDistance2(S, nowCrossPoint) < minDis) && (getDistance2(S, nowCrossPoint) > EPS))
 				minDis= getDistance2(r.origin, nowCrossPoint);
+		}
 	}
-	if ((minDis > EPS) && (getDistance2(S, T) - minDis > EPS))
+	if ((minDis > EPS) && (getDistance2(S, T) - minDis > EPS)) 
 		return true;
 	else
 		return false;

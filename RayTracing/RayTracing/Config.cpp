@@ -4,7 +4,7 @@ Config::Config() {
 	objSet = new vector<map<string, string>>;
 	lightSet = new vector<map<string, string>>;
 	//set limit coefficient(to be read in config file)
-	limitCoefficient = 0.001f;
+	limitCoefficient = 0.005f;
 }
 
 Config::~Config() {
