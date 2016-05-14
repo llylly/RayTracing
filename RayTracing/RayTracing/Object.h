@@ -15,16 +15,15 @@ public:
 	double diffuseFactor, specularFactor;
 	int specularPower;
 	double reflectFactor, environmentFactor;
+	double refractFactor, refractN;
 
 	Object();
 	Object(Vector _position, Color _color, double _diffuseFactor, double _specularFactor, int _specularPower,
-		double _reflectFactor, double _environmentFactor);
+		double _reflectFactor, double _environmentFactor, double refractFactor, double refractN);
 	~Object();
 
 	virtual bool intercept(const Ray&, Vector&);
-	virtual Color work(RayTracer* rayTracer, const Ray& inRay, const Vector& interceptP, double co);
 
-private:
 	virtual bool getNormal(const Vector&, Vector&);
 };
 

@@ -14,14 +14,20 @@ ConfigReader::ConfigReader(string path, Config *config) {
 Config* ConfigReader::readConfig() {
 
 	ifstream fin(filePath);
-	bool inObjectBody = false, inCameraBody = false, inLightBody = false;
+	bool inObjectBody = false, inCameraBody = false, inLightBody = false, inCommentBody = false;
 	map<string, string> objConf, cameraConf, lightConf;
 
 	while (!fin.eof()) {
 		string now, leftValue, rightValue;
 		getline(fin, now);
-		if (now.find("//") != -1) {
+		if ((now.find("//") != -1) || (inCommentBody)) {
 			continue;
+		}
+		if (now.find("/*") != -1) {
+			inCommentBody = true;
+		}
+		if (now.find("*/") != -1) {
+			inCommentBody = false;
 		}
 		if ((now.find("Object") != -1) && (now.find("{") != -1)) {
 			inObjectBody = true;

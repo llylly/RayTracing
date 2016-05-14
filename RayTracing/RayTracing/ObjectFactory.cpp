@@ -13,9 +13,10 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 	string Type;
 	Vector position;
 	Color color;
-	double diffuseFactor, specularFactor;
-	int specularPower;
-	double reflectFactor, environmentFactor;
+	double diffuseFactor = 0.0f, specularFactor = 0.0f;
+	int specularPower = 0.0f;
+	double reflectFactor = 0.0f, environmentFactor = 0.0f;
+	double refractFactor = 0.0f, refractN = 1.0f;
 
 	double radius; // pour le sphere
 
@@ -51,6 +52,12 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 		if (i->first == "EnvironmentFactor") {
 			is >> environmentFactor;
 		}
+		if (i->first == "RefractFactor") {
+			is >> refractFactor;
+		}
+		if (i->first == "RefractN") {
+			is >> refractN;
+		}
 
 		if (conf.at("Type") == "Sphere") {
 			if (i->first == "Radius") {
@@ -69,12 +76,12 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 	};
 	if (Type == "Sphere") {
 		now = new Sphere(position, color, radius, diffuseFactor, specularFactor, specularPower, 
-			reflectFactor, environmentFactor);
+			reflectFactor, environmentFactor, refractFactor, refractN);
 	} else
 	if (Type == "Plane") {
-		now = new Plane(normal, position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor);
+		now = new Plane(normal, position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN);
 	} else {
-		now = new Object(position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor);
+		now = new Object(position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN);
 	}
 	return now;
 }

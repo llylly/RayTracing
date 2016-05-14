@@ -1,9 +1,9 @@
 //Config Resolution
-Resolution = 1920 x 1080
+Resolution = 1366 x 768
 
 //Config AntiAliasing: 1x1
 AntiAliasingOn = 1
-AntiAliasingFactor = 3
+AntiAliasingFactor = 1
 
 //config display
 DisplayOn = 0
@@ -26,7 +26,7 @@ Light {
 
 Light {
 	Type = Point
-	Position = -4.0 5.0 -12.0
+	Position = 0.0 4.9 -19.0
 	Color = 255 174 201
 	HaloFactor = 12
 }
@@ -35,7 +35,7 @@ Light {
 //config objects
 Object {
 	Type = Sphere
-	Position = 2.0 0.0 -12.0
+	Position = 1.0 0.0 -12.0
 	Radius = 1.0
 	Color = 255 123 241
 	EnvironmentFactor = 0.1
@@ -63,10 +63,11 @@ Object {
 	Radius = 1.0
 	Color = 19 131 16
 	EnvironmentFactor = 0.1
-	DiffuseFactor = 0.5
-	SpecularFactor = 0.3
+	DiffuseFactor = 0.1
+	SpecularFactor = 0.2
 	SpecularPower = 30
-	ReflectFactor = 0.2
+	RefractFactor = 0.7
+	RefractN = 1.01
 }
 
 // ground
@@ -76,10 +77,10 @@ Object {
 	Position = 0.0 -1.0 0.0
 	Color = 255 255 255
 	EnvironmentFactor = 0.2
-	DiffuseFactor = 0.5
+	DiffuseFactor = 0.8
 	SpecularFactor = 0.3
 	SpecularPower = 30
-	ReflectFactor = 0.2
+	ReflectFactor = 0.0
 }
 
 // back wall
@@ -96,43 +97,43 @@ Object {
 }
 
 // left ground
-Object {
-	Type = Plane
-	Normal = 1.0 0.0 0.0
-	Position = -5.0 0.0 0.0
-	Color = 0 169 213
-	EnvironmentFactor = 0.1
-	DiffuseFactor = 0.6
-	SpecularFactor = 0.4
-	SpecularPower = 30
-	ReflectFactor = 0.0
-}
+//Object {
+//	Type = Plane
+//	Normal = 1.0 0.0 0.0
+//	Position = -5.0 0.0 0.0
+//	Color = 0 169 213
+//	EnvironmentFactor = 0.1
+//	DiffuseFactor = 0.6
+//	SpecularFactor = 0.4
+//	SpecularPower = 30
+//	ReflectFactor = 0.0
+//}
 
 // right ground
-Object {
-	Type = Plane
-	Normal = -1.0 0.0 0.0
-	Position = 5.0 0.0 0.0
-	Color = 0 169 213
-	EnvironmentFactor = 0.1
-	DiffuseFactor = 0.6
-	SpecularFactor = 0.4
-	SpecularPower = 30
-	ReflectFactor = 0.0
-}
+//Object {
+//	Type = Plane
+//	Normal = -1.0 0.0 0.0
+//	Position = 5.0 0.0 0.0
+//	Color = 0 169 213
+//	EnvironmentFactor = 0.1
+//	DiffuseFactor = 0.6
+//	SpecularFactor = 0.4
+//	SpecularPower = 30
+//	ReflectFactor = 0.0
+//}
 
 // ceiling
-Object {
-	Type = Plane
-	Normal = 0.0 -1.0 0.0
-	Position = 0.0 5.0 0.0
-	Color = 255 255 255
-	EnvironmentFactor = 0.1
-	DiffuseFactor = 0.6
-	SpecularFactor = 0.2
-	SpecularPower = 30
-	ReflectFactor = 0.2
-}
+//Object {
+//	Type = Plane
+//	Normal = 0.0 -1.0 0.0
+//	Position = 0.0 5.0 0.0
+//	Color = 255 255 255
+//	EnvironmentFactor = 0.1
+//	DiffuseFactor = 0.6
+//	SpecularFactor = 0.2
+//	SpecularPower = 30
+//	ReflectFactor = 0.2
+//}
 
 // front wall
 Object {

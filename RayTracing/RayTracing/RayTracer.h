@@ -38,5 +38,10 @@ private:
 	Image *image;
 	Camera *camera;
 	vector<Object*> objects;
+
+	Color objWork(const Ray& r, Vector crossPoint, double co, Object* selected);
+	Color refractOutWork(const Ray& r, double co);
+
+	bool getCrossedObj(const Ray &r, Vector& crossPoint, Object *(&crossObj));
 };
 #endif
