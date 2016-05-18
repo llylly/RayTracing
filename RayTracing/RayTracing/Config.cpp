@@ -3,6 +3,7 @@
 Config::Config() {
 	objSet = new vector<map<string, string>>;
 	lightSet = new vector<map<string, string>>;
+	setSet = new vector<pair<map<string, string>, vector<map<string, string>>>>;
 	//set limit coefficient(to be read in config file)
 	limitCoefficient = 0.005f;
 }
@@ -10,6 +11,7 @@ Config::Config() {
 Config::~Config() {
 	delete objSet;
 	delete lightSet;
+	delete setSet;
 }
 
 void Config::addObjectConf(const map<string, string> &conf) {
@@ -35,3 +37,12 @@ void Config::addLightConf(const map<string, string> &conf) {
 const vector<map<string, string>> &Config::getLightConf() {
 	return *lightSet;
 }
+
+void Config::addSet(const map<string, string> &conf, const vector<map<string, string>> (*nowSet)) {
+	setSet->push_back(make_pair(conf, *nowSet));
+}
+
+const vector<pair<map<string, string>, vector<map<string, string>>>> &Config::getSetConf() {
+	return *setSet;
+}
+

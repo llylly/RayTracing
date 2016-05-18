@@ -23,10 +23,13 @@ public:
 	const map<string, string> &getCameraConf();
 	void addLightConf(const map<string, string> &conf);
 	const vector<map<string, string>> &getLightConf();
+	void addSet(const map<string, string> &conf, const vector<map<string, string>> (*nowSet));
+	const vector<pair<map<string, string>, vector<map<string, string>>>> &getSetConf();
 
 private:
 	vector<map<string, string>> *objSet, *lightSet;
 	map<string, string> cameraConf;
+	vector<pair<map<string, string>, vector<map<string, string>>>> *setSet;
 };
 
 #endif

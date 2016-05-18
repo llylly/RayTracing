@@ -42,7 +42,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <DebugInformationFormat>None</DebugInformationFormat>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -50,6 +50,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>true</WholeProgramOptimization>
+      <OmitFramePointers>false</OmitFramePointers>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -79,6 +80,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightFactory.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="Plane.cpp" />
@@ -86,6 +88,8 @@
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RayTracer.cpp" />
     <ClCompile Include="RenderView.cpp" />
+    <ClCompile Include="Set.cpp" />
+    <ClCompile Include="SetFactory.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Tools.cpp" />
     <ClCompile Include="Vector.cpp" />
@@ -99,6 +103,7 @@
     <ClInclude Include="Image.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightFactory.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="Plane.h" />
@@ -106,6 +111,8 @@
     <ClInclude Include="Ray.h" />
     <ClInclude Include="RayTracer.h" />
     <ClInclude Include="RenderView.h" />
+    <ClInclude Include="Set.h" />
+    <ClInclude Include="SetFactory.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Tools.h" />
     <ClInclude Include="Vector.h" />

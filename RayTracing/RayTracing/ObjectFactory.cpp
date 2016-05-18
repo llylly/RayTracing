@@ -1,4 +1,5 @@
 #include "ObjectFactory.h"
+#include "Tools.h"
 
 ObjectFactory::ObjectFactory() {
 }
@@ -14,9 +15,9 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 	Vector position;
 	Color color;
 	double diffuseFactor = 0.0f, specularFactor = 0.0f;
-	int specularPower = 0.0f;
+	int specularPower = 0;
 	double reflectFactor = 0.0f, environmentFactor = 0.0f;
-	double refractFactor = 0.0f, refractN = 1.0f;
+	double refractFactor = 0.0f, refractN = 1.0f, beerConst = 0.0f;
 
 	double radius; // pour le sphere
 
@@ -58,14 +59,17 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 		if (i->first == "RefractN") {
 			is >> refractN;
 		}
+		if (i->first == "BeerConst") {
+			is >> beerConst;
+		}
 
-		if (conf.at("Type") == "Sphere") {
+		if (Type == "Sphere") {
 			if (i->first == "Radius") {
 				is >> radius;
 			}
 		}
 
-		if (conf.at("Type") == "Plane") {
+		if ((Type == "Plane") || (Type == "Mesh")) {
 			if (i->first == "Normal") {
 				double _x, _y, _z;
 				is >> _x >> _y >> _z;
@@ -73,15 +77,29 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 				normal = normalize(normal);
 			}
 		}
-	};
+	}
 	if (Type == "Sphere") {
 		now = new Sphere(position, color, radius, diffuseFactor, specularFactor, specularPower, 
-			reflectFactor, environmentFactor, refractFactor, refractN);
+			reflectFactor, environmentFactor, refractFactor, refractN, beerConst);
 	} else
 	if (Type == "Plane") {
-		now = new Plane(normal, position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN);
+		now = new Plane(normal, position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN, beerConst);
 	} else {
-		now = new Object(position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN);
+		now = new Object(position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN, beerConst);
 	}
+	if (Type == "Mesh") {
+		vector<Vector> *points = new vector<Vector>();
+		int tot = 0;
+		while (conf.count("P" + intToString(tot))) {
+			istringstream is(conf.at("P" + intToString(tot)));
+			double a, b, c;
+			is >> a >> b >> c;
+			points->push_back(Vector(a, b, c));
+			tot++;
+		}
+		now = new Mesh(normal, points, tot, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN, beerConst);
+	}
+
+		
 	return now;
 }

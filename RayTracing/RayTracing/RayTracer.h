@@ -12,7 +12,10 @@
 #include "Object.h"
 #include "LightFactory.h"
 #include "Light.h"
+#include "SetFactory.h"
+#include "Set.h"
 #include "Ray.h"
+#include "Set.h"
 
 using namespace std;
 
@@ -38,6 +41,7 @@ private:
 	Image *image;
 	Camera *camera;
 	vector<Object*> objects;
+	vector<Set*> sets;
 
 	Color objWork(const Ray& r, Vector crossPoint, double co, Object* selected);
 	Color refractOutWork(const Ray& r, double co);

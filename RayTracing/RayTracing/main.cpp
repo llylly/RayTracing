@@ -1,6 +1,7 @@
 #define DEBUG
 
 #include <cstdio>
+#include <ctime>
 #include <string>
 #include "RayTracer.h"
 
@@ -15,6 +16,7 @@ int main(int argc, char **argv) {
 #ifdef DEBUG
 	freopen("msg.txt", "w", stdout);
 #endif
+	srand(time(0));
 
 	RayTracer* mainTracer = new RayTracer(configIn, imageOut);
 	

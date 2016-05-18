@@ -13,7 +13,7 @@ public:
 	Sphere();
 	Sphere(Vector _position, Color _bgColor, double _radius, 
 		double _diffuseFactor, double _specularFactor, int _specularPower, 
-		double _reflectFactor, double _environmentFactor, double _refractFactor, double _refractN);
+		double _reflectFactor, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst);
 	~Sphere();
 
 	bool intercept(const Ray&, Vector&) override;

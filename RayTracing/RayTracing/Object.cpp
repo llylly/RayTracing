@@ -11,10 +11,10 @@ Object::Object() {
 }
 
 Object::Object(Vector _position, Color _color, double _diffuseFactor, double _specularFactor, int _specularPower,
-		double _reflectFactor, double _environmentFactor, double _refractFactor, double _refractN) {
+		double _reflectFactor, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst) {
 	type = "Object";
 	position = _position, bgColor = _color, diffuseFactor = _diffuseFactor, specularFactor = _specularFactor, specularPower = _specularPower,
-		reflectFactor = _reflectFactor, environmentFactor = _environmentFactor, refractFactor = _refractFactor, refractN = _refractN;
+		reflectFactor = _reflectFactor, environmentFactor = _environmentFactor, refractFactor = _refractFactor, refractN = _refractN, beerConst = _beerConst;
 }
 
 Object::~Object() {

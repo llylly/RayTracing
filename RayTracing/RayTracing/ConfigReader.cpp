@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <vector>
 #include "ConfigReader.h"
 
 using namespace std;
@@ -14,20 +15,21 @@ ConfigReader::ConfigReader(string path, Config *config) {
 Config* ConfigReader::readConfig() {
 
 	ifstream fin(filePath);
-	bool inObjectBody = false, inCameraBody = false, inLightBody = false, inCommentBody = false;
-	map<string, string> objConf, cameraConf, lightConf;
+	bool inObjectBody = false, inCameraBody = false, inLightBody = false, inCommentBody = false, inSetBody = false;
+	map<string, string> objConf, cameraConf, lightConf, setConf;
+	vector<map<string, string>> *nowSet = new vector<map<string, string>>;
 
 	while (!fin.eof()) {
 		string now, leftValue, rightValue;
 		getline(fin, now);
-		if ((now.find("//") != -1) || (inCommentBody)) {
-			continue;
-		}
 		if (now.find("/*") != -1) {
 			inCommentBody = true;
 		}
 		if (now.find("*/") != -1) {
 			inCommentBody = false;
+		}
+		if ((now.find("//") != -1) || (inCommentBody)) {
+			continue;
 		}
 		if ((now.find("Object") != -1) && (now.find("{") != -1)) {
 			inObjectBody = true;
@@ -42,10 +44,22 @@ Config* ConfigReader::readConfig() {
 			inLightBody = true;
 			lightConf.clear();
 		}
+		if ((now.find("Set") != -1) && (now.find("{") != -1)) {
+			inSetBody = true;
+			setConf.clear();
+			nowSet->clear();
+		}
 		if (now.find("}") != -1) {
 			if (inObjectBody) {
 				inObjectBody = false;
-				config->addObjectConf(objConf);
+				if (inSetBody)
+					nowSet->push_back(objConf);
+				else
+					config->addObjectConf(objConf);
+			} else
+			if (inSetBody) {
+				inSetBody = false;
+				config->addSet(setConf, nowSet);
 			}
 			if (inCameraBody) 
 				inCameraBody = false;
@@ -77,6 +91,8 @@ Config* ConfigReader::readConfig() {
 				cameraConf[leftValue] = rightValue;
 			else if (inLightBody)
 				lightConf[leftValue] = rightValue;
+			else if (inSetBody)
+				setConf[leftValue] = rightValue;
 			else
 				readItem(leftValue, rightValue);
 
@@ -84,6 +100,7 @@ Config* ConfigReader::readConfig() {
 	}
 	fin.close();
 	config->setCameraConf(cameraConf);
+	delete nowSet;
 	return this->config;
 }
 

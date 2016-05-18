@@ -67,7 +67,104 @@ Object {
 	SpecularFactor = 0.2
 	SpecularPower = 30
 	RefractFactor = 0.7
-	RefractN = 1.01
+	RefractN = 1.02
+	BeerConst = 0.15
+}
+
+
+Set {
+	Color = 19 131 15
+	EnvironmentFactor = 0.1
+	DiffuseFactor = 0.2
+	SpecularFactor = 0.1
+	SpecularPower = 30
+	ReflectFactor = 0.1
+	RefractFactor = 0.5
+	RefractN = 1.02
+	BeerConst = 0.15
+	UnitedStyle = 1
+
+	Object {
+		Type = Mesh
+		P0 = 1.0 0.0 -7.0
+		P1 = 1.0 2.0 -7.0
+		P2 = 2.0 2.0 -7.0
+		P3 = 2.0 0.0 -7.0
+		Normal = 0.0 0.0 1.0
+	}
+
+	Object {
+		Type = Mesh
+		Color = 19 131 15
+		EnvironmentFactor = 0.1
+		DiffuseFactor = 0.5
+		SpecularFactor = 0.3
+		SpecularPower = 30
+		ReflectFactor = 0.1
+		P0 = 1.0 0.0 -8.0
+		P1 = 1.0 2.0 -8.0
+		P2 = 2.0 2.0 -8.0
+		P3 = 2.0 0.0 -8.0
+		Normal = 0.0 0.0 -1.0
+	}
+
+	Object {
+		Type = Mesh
+		Color = 19 131 15
+		EnvironmentFactor = 0.1
+		DiffuseFactor = 0.5
+		SpecularFactor = 0.3
+		SpecularPower = 30
+		ReflectFactor = 0.1
+		P0 = 1.0 2.0 -7.0
+		P1 = 2.0 2.0 -7.0
+		P2 = 2.0 2.0 -8.0
+		P3 = 1.0 2.0 -8.0
+		Normal = 0.0 1.0 0.0
+	}
+	Object {
+		Type = Mesh
+		Color = 19 131 15
+		EnvironmentFactor = 0.1
+		DiffuseFactor = 0.5
+		SpecularFactor = 0.3
+		SpecularPower = 30
+		ReflectFactor = 0.1
+		P0 = 1.0 0.0 -7.0
+		P1 = 2.0 0.0 -7.0
+		P2 = 2.0 0.0 -8.0
+		P3 = 1.0 0.0 -8.0
+		Normal = 0.0 -1.0 0.0
+	}
+	Object {
+		Type = Mesh
+		Color = 19 131 15
+		EnvironmentFactor = 0.1
+		DiffuseFactor = 0.5
+		SpecularFactor = 0.3
+		SpecularPower = 30
+		ReflectFactor = 0.1
+		P0 = 1.0 0.0 -7.0
+		P1 = 1.0 2.0 -7.0
+		P2 = 1.0 2.0 -8.0
+		P3 = 1.0 0.0 -8.0
+		Normal = -1.0 0.0 0.0
+	}
+	Object {
+		Type = Mesh
+		Color = 19 131 15
+		EnvironmentFactor = 0.1
+		DiffuseFactor = 0.5
+		SpecularFactor = 0.3
+		SpecularPower = 30
+		ReflectFactor = 0.1
+		P0 = 2.0 0.0 -7.0
+		P1 = 2.0 2.0 -7.0
+		P2 = 2.0 2.0 -8.0
+		P3 = 2.0 0.0 -8.0
+		Normal = 1.0 0.0 0.0
+	}
+
 }
 
 // ground
@@ -94,7 +191,7 @@ Object {
 	SpecularFactor = 0.3
 	SpecularPower = 30
 	ReflectFactor = 0.2
-}
+}r
 
 // left ground
 //Object {

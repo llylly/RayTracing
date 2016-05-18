@@ -51,6 +51,12 @@ RayTracer::RayTracer(string configIn, string imageOut) {
 	LightFactory *lightFactory = new LightFactory();
 	for (vector<map<string, string>>::const_iterator i = config->getLightConf().begin(); i != config->getLightConf().end(); i++)
 		lights.push_back(lightFactory->newLight(*i));
+
+	//setting sets
+	SetFactory *setFactory = new SetFactory();
+	for (vector<pair<map<string, string>, vector<map<string, string>>>>::const_iterator i = config->getSetConf().begin(); i != config->getSetConf().end(); i++) 
+		sets.push_back(setFactory->newSet(*i));
+
 }
 
 RayTracer::~RayTracer() {
@@ -146,10 +152,12 @@ Color RayTracer::refractOutWork(const Ray &r, double co) {
 	Object *selected;
 	int times = 0;
 	Ray nowR = r;
+	double dist = 0.0f;
 	while (times <= 100) { //parameter's misery
 		if (getCrossedObj(nowR, totCrossPoint, selected)) {
 			Vector normal;
 			selected->getNormal(totCrossPoint, normal);
+			dist += getDistance(nowR.origin, totCrossPoint);
 			double nInv = 1.0f / selected->refractN;
 			double cosI = -dot(normal, nowR.direction);
 			if (cosI > 0) {
@@ -157,14 +165,14 @@ Color RayTracer::refractOutWork(const Ray &r, double co) {
 				if (cosT2 > 0.0f) {
 					Vector T = (nInv * nowR.direction) + (nInv * cosI - sqrt(cosT2)) * normal;
 					Ray refractRay(totCrossPoint + T * EPS, T);
-					return work(refractRay, co);
+					return exp(-dist * selected->beerConst) * work(refractRay, co);
 				}
 			} else {
 				double cosT2 = 1.0f - selected->refractN * selected->refractN * (1.0f - cosI * cosI);
 				if (cosT2 > 0.0f) {
 					Vector T = (selected->refractN * nowR.direction) + (sqrt(cosT2) + selected->refractN * cosI) * normal;
 					Ray refractRay(totCrossPoint + T * EPS, T);
-					return work(refractRay, co);
+					return exp(-dist * selected->beerConst) * work(refractRay, co);
 				}
 			}
 			++times;
@@ -209,6 +217,16 @@ bool RayTracer::getCrossedObj(const Ray &r, Vector& crossPoint, Object *(&crossO
 			}
 		}
 	}
+	for (vector<Set*>::iterator s = sets.begin(); s != sets.end(); s++)
+		for (vector<Object*>::iterator i = (*s)->objSet->begin(); i != (*s)->objSet->end(); i++) {
+			if ((*i)->intercept(r, nowCrossPoint)) {
+				if ((getDistance2(r.origin, nowCrossPoint) < minDis) && (getDistance2(r.origin, nowCrossPoint) > EPS)) {
+					minDis = getDistance2(r.origin, nowCrossPoint);
+					crossObj = *i;
+					crossPoint = nowCrossPoint;
+				}
+			}
+		}
 	if (crossObj == nullptr) return false; else return true;
 }
 
@@ -222,6 +240,13 @@ bool RayTracer::collide(const Vector &S, const Vector &T) {
 				minDis= getDistance2(r.origin, nowCrossPoint);
 		}
 	}
+	for (vector<Set*>::iterator s = sets.begin(); s != sets.end(); s++)
+		for (vector<Object*>::iterator i = (*s)->objSet->begin(); i != (*s)->objSet->end(); i++) {
+			if ((*i)->intercept(r, nowCrossPoint)) {
+				if ((getDistance2(S, nowCrossPoint) < minDis) && (getDistance2(S, nowCrossPoint) > EPS))
+					minDis= getDistance2(r.origin, nowCrossPoint);
+			}
+		}
 	if ((minDis > EPS) && (getDistance2(S, T) - minDis > EPS)) 
 		return true;
 	else

@@ -15,12 +15,12 @@ Sphere::Sphere() {
 Sphere::Sphere(Vector _position, Color _bgColor, double _radius, 
 		double _diffuseFactor, double _specularFactor, int _specularPower, 
 		double _reflectFactor, double _environmentFactor,
-		double _refractFactor, double _refractN) {
+		double _refractFactor, double _refractN, double _beerConst) {
 	type = "Sphere";
 	position = _position, bgColor = _bgColor, radius = _radius, 
 	diffuseFactor = _diffuseFactor, specularFactor = _specularFactor, specularPower = _specularPower,
 		reflectFactor = _reflectFactor, environmentFactor = _environmentFactor,
-		refractFactor = _refractFactor, refractN = _refractN;
+		refractFactor = _refractFactor, refractN = _refractN, beerConst = _beerConst;
 }
 
 Sphere::~Sphere() {

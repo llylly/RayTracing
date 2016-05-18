@@ -1,6 +1,7 @@
 #ifndef OBJECTFACTORY_H
 #define OBJECTFACTORY_H
 
+#include <vector>
 #include <map>
 #include <string>
 #include <sstream>
@@ -9,6 +10,7 @@
 #include "Object.h"
 #include "Sphere.h"
 #include "Plane.h"
+#include "Mesh.h"
 
 using namespace std;
 
