@@ -14,6 +14,8 @@ public:
 	int antiAliasingFactor;
 	bool displayOn;
 	double limitCoefficient;
+	int diffuseReflectionTimes;
+	int totThread;
 
 	Config();
 	~Config();

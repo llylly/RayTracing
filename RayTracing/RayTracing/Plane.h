@@ -10,16 +10,15 @@ public:
 	Vector N;
 
 	Plane();
-	Plane(Vector _N, Vector _position, Color _color, double _diffuseFactor, double _specularFactor, int _specularPower,
-		double _reflectFactor, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst);
+	Plane(Vector _N, Vector _position, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, string _texturePath, double _diffuseFactor, double _specularFactor, int _specularPower,
+		double _reflectFactor, double _diffuseReflectValue, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst);
 	~Plane();
 
 	bool intercept(const Ray&, Vector&) override;
-
-private:
 	bool getNormal(const Vector&, Vector&) override;
+	Color getColor(const Vector& p) override;
 
-	friend Object;
+	double textureXVecLen2, textureYVecLen2;
 };
 
 #endif

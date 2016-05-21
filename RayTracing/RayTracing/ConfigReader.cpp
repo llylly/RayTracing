@@ -147,7 +147,7 @@ void ConfigReader::readItem(const string& name, const string &value) {
 		config->antiAliasingFactor = num;
 	}
 	if (name == "DisplayOn") {
-				char able = '0';
+		char able = '0';
 		for (int i=0; i<value.length(); i++)
 			if ((value[i] >= '0') && (value[i] <= '9'))
 				able = value[i];
@@ -155,5 +155,17 @@ void ConfigReader::readItem(const string& name, const string &value) {
 			config->displayOn = false;
 		else
 			config->displayOn = true;
+	}
+	if (name == "DiffuseReflectTimes") {
+		istringstream is(value);
+		is >> config->diffuseReflectionTimes;
+	}
+	if (name == "LimitCoefficient") {
+		istringstream is(value);
+		is >> config->limitCoefficient;
+	}
+	if (name == "TotThread") {
+		istringstream is(value);
+		is >> config->totThread;
 	}
 }

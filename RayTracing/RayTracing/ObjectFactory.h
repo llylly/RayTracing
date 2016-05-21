@@ -11,6 +11,7 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "Mesh.h"
+#include "TriMesh.h"
 
 using namespace std;
 

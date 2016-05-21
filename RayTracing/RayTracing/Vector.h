@@ -22,6 +22,10 @@ Vector operator*(const Vector&, double);
 
 Vector &operator*=(Vector&, double);
 
+Vector operator/(const Vector&, double);
+
+Vector &operator/=(Vector&, double);
+
 Vector operator+(const Vector&, const Vector&);
 
 Vector &operator+=(Vector&, const Vector&);
@@ -45,5 +49,11 @@ double getDistance(const Vector&, const Vector&);
 double getDistance2(const Vector&, const Vector&);
 
 Vector operator-(const Vector&);
+
+Vector getArbitraryPlaneVec(const Vector &N, double length = 1.0f);
+
+Vector getPerpendicularVec(const Vector &N, const Vector &planeVec);
+
+double det3(const Vector &v1, const Vector &v2, const Vector &v3);
 
 #endif

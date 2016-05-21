@@ -7,13 +7,23 @@ Plane::Plane() {
 	type = "Plane";
 }
 
-Plane::Plane(Vector _N, Vector _position, Color _color, double _diffuseFactor, double _specularFactor, int _specularPower,
-		double _reflectFactor, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst) {
+Plane::Plane(Vector _N, Vector _position, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, string _texturePath, double _diffuseFactor, double _specularFactor, int _specularPower,
+		double _reflectFactor, double _diffuseReflectValue, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst) {
 	type = "Plane";
 	N = _N, 
-	position = _position, bgColor = _color, diffuseFactor = _diffuseFactor, specularFactor = _specularFactor, specularPower = _specularPower,
-				reflectFactor = _reflectFactor, environmentFactor = _environmentFactor,
+	position = _position, bgColor = _color, textured = _textured, textureOrigin = _textureOrigin, textureXVec = _textureXVec, textureYVec = _textureYVec, texturePath = _texturePath,
+	diffuseFactor = _diffuseFactor, specularFactor = _specularFactor, specularPower = _specularPower,
+	reflectFactor = _reflectFactor, diffuseReflectValue = _diffuseReflectValue, environmentFactor = _environmentFactor,
 				refractFactor = _refractFactor, refractN = _refractN, beerConst = _beerConst;
+	if (textured) {
+		calTextureVec(N);
+		textureXVecLen = getLength(textureXVec),
+			textureYVecLen = getLength(textureYVec);
+		textureXVecLen2 = textureXVecLen * textureXVecLen,
+		textureYVecLen2 = textureYVecLen * textureYVecLen;
+		texture.open(_texturePath);
+		textureOrigin += dot(_position - textureOrigin, N) * N;
+	}
 }
 
 Plane::~Plane() {
@@ -32,4 +42,11 @@ bool Plane::getNormal(const Vector &p, Vector &N) {
 	if (abs(dot(this->N, p - position))>EPS) return false;
 	N = this->N;
 	return true;
+}
+
+Color Plane::getColor(const Vector &p) {
+	if (textured)
+		return texture.getColor(dot(p - textureOrigin, textureXVec) / textureXVecLen2, dot(p - textureOrigin, textureYVec) / textureYVecLen2);
+	else 
+		return bgColor;
 }

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <thread>
 #include "ConfigReader.h"
 #include "Config.h"
 #include "Image.h"
@@ -12,6 +13,7 @@
 #include "Object.h"
 #include "LightFactory.h"
 #include "Light.h"
+#include "PlaneLight.h"
 #include "SetFactory.h"
 #include "Set.h"
 #include "Ray.h"
@@ -21,31 +23,33 @@ using namespace std;
 
 struct RayTracer {
 public:
-	string configIn, imageOut;
-	vector<Light*> lights;
+	static string configIn, imageOut;
+	static vector<Light*> lights;
 
 	RayTracer();
 	RayTracer(string configIn, string imageOut);
 	~RayTracer();
-	void run();
-	void save();
-	Color work(const Ray&, double co = 1.0f);
-	bool collide(const Vector&, const Vector&);
+	static void run();
+	static void save();
+	static Color work(const Ray&, double co = 1.0f);
+	static bool collide(const Vector&, const Vector&);
 
-	int getRenderWidth();
-	int getRenderHeight();
-	bool getDisplayOn();
+	static int getRenderWidth();
+	static int getRenderHeight();
+	static bool getDisplayOn();
 
 private:
-	Config *config;
-	Image *image;
-	Camera *camera;
-	vector<Object*> objects;
-	vector<Set*> sets;
+	static Config *config;
+	static Image *image;
+	static Camera *camera;
+	static vector<Object*> objects;
+	static vector<Set*> sets;
 
-	Color objWork(const Ray& r, Vector crossPoint, double co, Object* selected);
-	Color refractOutWork(const Ray& r, double co);
+	static void threadProc(int s);
 
-	bool getCrossedObj(const Ray &r, Vector& crossPoint, Object *(&crossObj));
+	static Color objWork(const Ray& r, Vector crossPoint, double co, Object* selected);
+	static Color refractOutWork(const Ray& r, double co);
+
+	static bool getCrossedObj(const Ray &r, Vector& crossPoint, Object *(&crossObj), Light *(&crossLight));
 };
 #endif

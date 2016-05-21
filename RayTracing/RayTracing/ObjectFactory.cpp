@@ -13,11 +13,17 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 
 	string Type;
 	Vector position;
-	Color color;
+	Color color = Color(0.0f, 0.0f, 0.0f);
 	double diffuseFactor = 0.0f, specularFactor = 0.0f;
 	int specularPower = 0;
 	double reflectFactor = 0.0f, environmentFactor = 0.0f;
 	double refractFactor = 0.0f, refractN = 1.0f, beerConst = 0.0f;
+	double diffuseReflectValue = 0.0f;
+	bool textured = false;
+	Vector textureOrigin = Vector(0.0f, 0.0f, 0.0f), 
+		textureXVec = Vector(0.0f, 0.0f, 0.0f), 
+		textureYVec = Vector(0.0f, 0.0f, 0.0f);
+	string texturePath = "";
 
 	double radius; // pour le sphere
 
@@ -38,6 +44,24 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 			is >> R >> G >> B;
 			color = Color((double)R/255.0f, (double)G/255.0f, (double)B/255.0f);
 		}
+		if (i->first == "UseTexture") {
+			int tmp;
+			is >> tmp;
+			if (tmp) textured = true; else textured = false;
+		}
+		if (i->first == "TextureOrigin") {
+			is >> textureOrigin.x >> textureOrigin.y >> textureOrigin.z;
+		}
+		if (i->first == "TextureXVec") {
+			is >> textureXVec.x >> textureXVec.y >> textureXVec.z;
+		}
+		if (i->first == "TextureYVec") {
+			is >> textureYVec.x >> textureYVec.y >> textureYVec.z;
+		}
+		if (i->first == "TexturePath") {
+			int ls = i->second.find_first_of("\""), rs = i->second.find_last_of("\"");
+			texturePath = i->second.substr(ls+1, rs-ls-1);
+		}
 		if (i->first == "DiffuseFactor") {
 			is >> diffuseFactor;
 		}
@@ -49,6 +73,9 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 		}
 		if (i->first == "ReflectFactor") {
 			is >> reflectFactor;
+		}
+		if (i->first == "DiffuseReflectValue") {
+			is >> diffuseReflectValue;
 		}
 		if (i->first == "EnvironmentFactor") {
 			is >> environmentFactor;
@@ -69,7 +96,7 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 			}
 		}
 
-		if ((Type == "Plane") || (Type == "Mesh")) {
+		if ((Type == "Plane") || (Type == "Mesh") || (Type == "TriMesh")) {
 			if (i->first == "Normal") {
 				double _x, _y, _z;
 				is >> _x >> _y >> _z;
@@ -79,15 +106,15 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 		}
 	}
 	if (Type == "Sphere") {
-		now = new Sphere(position, color, radius, diffuseFactor, specularFactor, specularPower, 
-			reflectFactor, environmentFactor, refractFactor, refractN, beerConst);
+		now = new Sphere(position, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, radius, diffuseFactor, specularFactor, specularPower, 
+			reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
 	} else
 	if (Type == "Plane") {
-		now = new Plane(normal, position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN, beerConst);
+		now = new Plane(normal, position, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
 	} else {
-		now = new Object(position, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN, beerConst);
+		now = new Object(position, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
 	}
-	if (Type == "Mesh") {
+	if ((Type == "Mesh") || (Type == "TriMesh")) {
 		vector<Vector> *points = new vector<Vector>();
 		int tot = 0;
 		while (conf.count("P" + intToString(tot))) {
@@ -97,7 +124,10 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 			points->push_back(Vector(a, b, c));
 			tot++;
 		}
-		now = new Mesh(normal, points, tot, color, diffuseFactor, specularFactor, specularPower, reflectFactor, environmentFactor, refractFactor, refractN, beerConst);
+		if (points->size() == 3)
+			now = new TriMesh(normal, points, tot, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+		else
+			now = new Mesh(normal, points, tot, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
 	}
 
 		

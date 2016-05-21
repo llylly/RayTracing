@@ -7,8 +7,8 @@ Mesh::Mesh() {
 	type = "Mesh";
 }
 
-Mesh::Mesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, double _diffuseFactor, double _specularFactor, int _specularPower,
-		double _reflectFactor, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst, bool _recalNormal) {
+Mesh::Mesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, string _texturePath, double _diffuseFactor, double _specularFactor, int _specularPower,
+		double _reflectFactor, double _diffuseReflectValue, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst, bool _recalNormal) {
 	pointTot = _tot;
 	points = new vector<Vector>;
 	type = "Mesh";
@@ -18,15 +18,27 @@ Mesh::Mesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, doub
 	}
 	type = "Mesh";
 	position = points->at(0);
-	bgColor = _color, diffuseFactor = _diffuseFactor, specularFactor = _specularFactor, specularPower = _specularPower,
-				reflectFactor = _reflectFactor, environmentFactor = _environmentFactor,
+	bgColor = _color, textured = _textured, textureOrigin = _textureOrigin, textureXVec = _textureXVec, textureYVec = _textureYVec, texturePath = _texturePath,
+		diffuseFactor = _diffuseFactor, specularFactor = _specularFactor, specularPower = _specularPower,
+		reflectFactor = _reflectFactor, diffuseReflectValue = _diffuseReflectValue, environmentFactor = _environmentFactor,
 				refractFactor = _refractFactor, refractN = _refractN;
 	normal = cross(points->at(1) - points->at(0), points->at(2) - points->at(0));
-	normal = normalize(normal * dot(normal, _normal));
+	normal = normalize(normal);
+	// real normal vector
 	if ((pointTot >= 3) && (_recalNormal)) {
 		N = normal;
-	} else 
-		N = _normal;
+	} else {
+		N = _normal; // fake normal vector
+	}
+	if (textured) {
+		calTextureVec(normal);
+		textureXVecLen = getLength(textureXVec),
+			textureYVecLen = getLength(textureYVec);
+		textureXVecLen2 = textureXVecLen * textureXVecLen,
+		textureYVecLen2 = textureYVecLen * textureYVecLen;
+		texture.open(_texturePath);
+		textureOrigin += dot(position - textureOrigin, normal) * N;
+	}
 }
 
 Mesh::~Mesh() {
@@ -41,20 +53,8 @@ bool Mesh::intercept(const Ray &r, Vector &p) {
 
 	int cnt = 0;
 	double x, y;
-	Vector R;
-	if (abs(normal.z) > EPS) {
-		R.x = (double)rand() / (double)RAND_MAX * 1000.0f;
-		R.y = (double)rand() / (double)RAND_MAX * 1000.0f;
-		R.z = -(normal.x * R.x + normal.y * R.y) / normal.z;
-	} else if (abs(normal.y) > EPS) {
-		R.x = (double)rand() / (double)RAND_MAX * 1000.0f;
-		R.z = (double)rand() / (double)RAND_MAX * 1000.0f;
-		R.y = -(normal.x * R.x + normal.z * R.z) / normal.y;
-	} else {
-		R.y = (double)rand() / (double)RAND_MAX * 1000.0f;
-		R.z = (double)rand() / (double)RAND_MAX * 1000.0f;
-		R.x = -(normal.y * R.y + normal.z * R.z) / normal.x;
-	}
+	Vector R = getArbitraryPlaneVec(normal, 1000.0f);
+
 	for (int i=0; i < points->size(); i++) {
 		Vector ta = points->at(i) - points->at(((i+1) == points->size())?0:(i+1)),
 			   tc = p - points->at(((i+1) == points->size())?0:(i+1));
@@ -75,10 +75,16 @@ bool Mesh::intercept(const Ray &r, Vector &p) {
 	return (cnt & 1);
 }
 
-
 bool Mesh::getNormal(const Vector &p, Vector &N) {
 	// guarantee p is on the mesh
-	if (abs(dot(this->N, p - position))>EPS) return false;
+	if (abs(dot(this->normal, p - position))>EPS) return false;
 	N = this->N;
 	return true;
+}
+
+Color Mesh::getColor(const Vector &p) {
+	if (textured)
+		return texture.getColor(dot(p - textureOrigin, textureXVec) / textureXVecLen2, dot(p - textureOrigin, textureYVec) / textureYVecLen2);
+	else 
+		return bgColor;
 }

@@ -3,6 +3,9 @@
 
 #include <map>
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "Object.h"
 #include "ObjectFactory.h"
 #include "Set.h"
@@ -13,6 +16,10 @@ public:
 	~SetFactory();
 
 	Set *newSet(pair<map<string, string>, vector<map<string, string>>>);
+
+private:
+	void fromFile(Set* (&now));
+	Vector pointTrans(const Vector&, Set*, bool isNormal = 0);
 };
 
 #endif

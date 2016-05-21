@@ -1,5 +1,5 @@
 #include "BMP.h"
-
+#define EPS 1e-6
 
 BMP::BMP() {
 	width = height = 0;
@@ -90,7 +90,7 @@ inline void BMP::spaceClear() {
 }
 
 const Color &BMP::get(int x, int y) {
-	return arr[x][y];
+	return arr[y][x];
 }
 
 int BMP::Width() {
@@ -99,4 +99,25 @@ int BMP::Width() {
 
 int BMP::Height() {
 	return height;
+}
+
+Color BMP::getColor(double x, double y) {
+	x = x - long long(x), y = y - long long(y);
+	x = (x < 0.0f)?-x:x, y = (y < 0.0f)?-y:y;
+	double rx = x * (width - 1), ry = y * (height - 1);
+	int ix = (int)rx, iy = (int)ry;
+	double a = (1.0f + ix - rx) * (1.0f + iy - ry),
+		b = (rx - ix) * (1.0f + iy - ry),
+		c = (1.0f + ix - rx) * (ry - iy),
+		d = (rx - ix) * (ry - iy);
+	Color ans = Color(0.0f, 0.0f, 0.0f);
+	if (a > EPS)
+		ans += a * get(ix, iy);
+	if (b > EPS)
+		ans += b * get(ix + 1, iy);
+	if (c > EPS)
+		ans += c * get(ix, iy + 1);
+	if (d > EPS)
+		ans += d * get(ix + 1, iy + 1);
+	return ans;
 }

@@ -2,6 +2,7 @@
 #define CONFIGREADER_H
 
 #include <string>
+#include <sstream>
 #include "Config.h"
 
 using namespace std;

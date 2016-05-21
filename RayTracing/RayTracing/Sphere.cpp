@@ -12,15 +12,23 @@ Sphere::Sphere() {
 	type = "Sphere";
 }
 
-Sphere::Sphere(Vector _position, Color _bgColor, double _radius, 
+Sphere::Sphere(Vector _position, Color _bgColor, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, string _texturePath, double _radius, 
 		double _diffuseFactor, double _specularFactor, int _specularPower, 
-		double _reflectFactor, double _environmentFactor,
+		double _reflectFactor, double _diffuseReflectValue, double _environmentFactor,
 		double _refractFactor, double _refractN, double _beerConst) {
 	type = "Sphere";
-	position = _position, bgColor = _bgColor, radius = _radius, 
+	position = _position, bgColor = _bgColor, textured = _textured, textureOrigin = _textureOrigin, textureXVec = _textureXVec, textureYVec = _textureYVec, texturePath = _texturePath,
+		radius = _radius, 
 	diffuseFactor = _diffuseFactor, specularFactor = _specularFactor, specularPower = _specularPower,
-		reflectFactor = _reflectFactor, environmentFactor = _environmentFactor,
+		reflectFactor = _reflectFactor, diffuseReflectValue = _diffuseReflectValue, environmentFactor = _environmentFactor,
 		refractFactor = _refractFactor, refractN = _refractN, beerConst = _beerConst;
+	if (textured) {
+		calTextureVec(Vector(0, 0, 1));
+		textureXVecLen = getLength(textureXVec),
+			textureYVecLen = getLength(textureYVec);
+		texture.open(_texturePath);
+		textureOrigin.z = 0.0f;	
+	}
 }
 
 Sphere::~Sphere() {
@@ -51,3 +59,12 @@ bool Sphere::getNormal(const Vector& p, Vector& N) {
 	return true;
 }
 
+Color Sphere::getColor(const Vector &p) {
+	if (textured) {
+		Vector P = normalize(p - position);
+		double X = dot(P, Vector(0.0f, 1.0f, 0.0f));
+		double Y = dot(P, Vector(1.0f, 0.0f, 0.0f)) * sqrt(1.0f - X * X);
+		return texture.getColor( X / 2.0f + 0.5f, Y / 2.0f + 0.5);
+	} else 
+		return bgColor;
+}

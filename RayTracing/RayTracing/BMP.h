@@ -17,6 +17,7 @@ public:
 	const Color &get(int, int);
 	int Width();
 	int Height();
+	Color getColor(double x, double y);
 	
 private:
 	string filePath;
