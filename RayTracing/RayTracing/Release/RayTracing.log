@@ -1,4 +1,4 @@
-﻿生成启动时间为 2016/5/21 15:14:06。
+﻿生成启动时间为 2016/5/21 16:26:29。
      1>项目“I:\graphics\rayTracing\RayTracing\RayTracing\RayTracing.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /nologo /W3 /WX- /Ox /Ob2 /Oi /Ot /Oy /GT /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt BMP.cpp Camera.cpp Color.cpp Config.cpp ConfigReader.cpp Image.cpp Light.cpp LightFactory.cpp main.cpp Mesh.cpp Object.cpp ObjectFactory.cpp Plane.cpp PlaneLight.cpp PointLight.cpp Ray.cpp RayTracer.cpp RenderView.cpp Set.cpp SetFactory.cpp Sphere.cpp Tools.cpp TriMesh.cpp Vector.cpp
@@ -71,4 +71,4 @@
 
 生成成功。
 
-已用时间 00:00:15.78
+已用时间 00:00:12.94

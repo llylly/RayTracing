@@ -1,8 +1,18 @@
-﻿生成启动时间为 2016/5/21 15:09:20。
+﻿生成启动时间为 2016/5/21 16:26:15。
      1>项目“I:\graphics\rayTracing\RayTracing\RayTracing\RayTracing.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Ob2 /Oi /Ot /Oy /GT /GL /D _MBCS /Gm /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp- /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt SetFactory.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Ob2 /Oi /Ot /Oy /GT /GL /D _MBCS /Gm /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp- /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Object.cpp ObjectFactory.cpp Plane.cpp RayTracer.cpp RenderView.cpp SetFactory.cpp Sphere.cpp TriMesh.cpp main.cpp
+         TriMesh.cpp
+         正在编译...
          SetFactory.cpp
+         ObjectFactory.cpp
+         正在跳过...(未检测到相关更改)
+         main.cpp
+         Sphere.cpp
+         RenderView.cpp
+         RayTracer.cpp
+         Plane.cpp
+         Object.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"I:\graphics\rayTracing\RayTracing\Debug\RayTracing.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"I:\graphics\rayTracing\RayTracing\Debug\RayTracing.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"I:\graphics\rayTracing\RayTracing\Debug\RayTracing.lib" /MACHINE:X86 Debug\BMP.obj
          Debug\Camera.obj
@@ -37,4 +47,4 @@
 
 生成成功。
 
-已用时间 00:00:03.45
+已用时间 00:00:03.85

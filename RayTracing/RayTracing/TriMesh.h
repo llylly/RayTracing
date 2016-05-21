@@ -11,6 +11,9 @@ public:
 	~TriMesh();
 
 	bool intercept(const Ray &r, Vector &p) override;
+
+private:
+	//double XFac, YFac, ZFac;
 };
 
 #endif
