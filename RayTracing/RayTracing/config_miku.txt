@@ -1,9 +1,9 @@
 //Config Resolution
-Resolution = 1920 x 1080
+Resolution = 400 x 300
 
 //Config AntiAliasing
 AntiAliasingOn = 1
-AntiAliasingFactor = 3
+AntiAliasingFactor = 1
 
 //config display
 DisplayOn = 0

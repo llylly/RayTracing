@@ -1,5 +1,5 @@
 //Config Resolution
-Resolution = 1366 x 768
+Resolution = 400 x 300
 
 //Config AntiAliasing
 AntiAliasingOn = 1

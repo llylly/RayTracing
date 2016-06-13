@@ -33,7 +33,7 @@ bool TriMesh::getNormal(const Vector &p, Vector &N) {
 		N = this->N;
 	} else {
 		Vector coef = triEquationSolver(points->at(0), points->at(1), points->at(2), p);
-		N = coef.x * pns.at(0) + coef.y * pns.at(1) + coef.z * pns.at(2);
+		N = normalize(coef.x * pns.at(0) + coef.y * pns.at(1) + coef.z * pns.at(2));
 	}
 	return true;
 }
