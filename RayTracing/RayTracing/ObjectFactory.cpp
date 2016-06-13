@@ -105,14 +105,17 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 			}
 		}
 	}
+	BMP *texture;
+	if (textured) 
+		texture = new BMP(texturePath);
 	if (Type == "Sphere") {
-		now = new Sphere(position, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, radius, diffuseFactor, specularFactor, specularPower, 
+		now = new Sphere(position, color, textured, textureOrigin, textureXVec, textureYVec, texture, radius, diffuseFactor, specularFactor, specularPower, 
 			reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
 	} else
 	if (Type == "Plane") {
-		now = new Plane(normal, position, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+		now = new Plane(normal, position, color, textured, textureOrigin, textureXVec, textureYVec, texture, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
 	} else {
-		now = new Object(position, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+		now = new Object(position, color, textured, textureOrigin, textureXVec, textureYVec, texture, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
 	}
 	if ((Type == "Mesh") || (Type == "TriMesh")) {
 		vector<Vector> *points = new vector<Vector>();
@@ -125,9 +128,9 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 			tot++;
 		}
 		if (points->size() == 3)
-			now = new TriMesh(normal, points, tot, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+			now = new TriMesh(normal, points, tot, color, textured, textureOrigin, textureXVec, textureYVec, texture, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
 		else
-			now = new Mesh(normal, points, tot, color, textured, textureOrigin, textureXVec, textureYVec, texturePath, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+			now = new Mesh(normal, points, tot, color, textured, textureOrigin, textureXVec, textureYVec, texture, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
 	}
 
 		

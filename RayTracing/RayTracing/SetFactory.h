@@ -19,7 +19,7 @@ public:
 
 private:
 	void fromFile(Set* (&now));
-	Vector pointTrans(const Vector&, Set*, bool isNormal = 0);
+	Vector pointTrans(const Vector&, Set*, int isNormal = 0);
 };
 
 #endif

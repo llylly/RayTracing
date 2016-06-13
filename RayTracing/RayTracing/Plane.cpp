@@ -2,16 +2,17 @@
 
 #include "Plane.h"
 #include "RayTracer.h"
+#include "Tools.h"
 
 Plane::Plane() {
 	type = "Plane";
 }
 
-Plane::Plane(Vector _N, Vector _position, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, string _texturePath, double _diffuseFactor, double _specularFactor, int _specularPower,
+Plane::Plane(Vector _N, Vector _position, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, BMP *_texture, double _diffuseFactor, double _specularFactor, int _specularPower,
 		double _reflectFactor, double _diffuseReflectValue, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst) {
 	type = "Plane";
 	N = _N, 
-	position = _position, bgColor = _color, textured = _textured, textureOrigin = _textureOrigin, textureXVec = _textureXVec, textureYVec = _textureYVec, texturePath = _texturePath,
+	position = _position, bgColor = _color, textured = _textured, textureOrigin = _textureOrigin, textureXVec = _textureXVec, textureYVec = _textureYVec, texture = _texture,
 	diffuseFactor = _diffuseFactor, specularFactor = _specularFactor, specularPower = _specularPower,
 	reflectFactor = _reflectFactor, diffuseReflectValue = _diffuseReflectValue, environmentFactor = _environmentFactor,
 				refractFactor = _refractFactor, refractN = _refractN, beerConst = _beerConst;
@@ -19,9 +20,6 @@ Plane::Plane(Vector _N, Vector _position, Color _color, bool _textured, Vector _
 		calTextureVec(N);
 		textureXVecLen = getLength(textureXVec),
 			textureYVecLen = getLength(textureYVec);
-		textureXVecLen2 = textureXVecLen * textureXVecLen,
-		textureYVecLen2 = textureYVecLen * textureYVecLen;
-		texture.open(_texturePath);
 		textureOrigin += dot(_position - textureOrigin, N) * N;
 	}
 }
@@ -45,8 +43,9 @@ bool Plane::getNormal(const Vector &p, Vector &N) {
 }
 
 Color Plane::getColor(const Vector &p) {
-	if (textured)
-		return texture.getColor(dot(p - textureOrigin, textureXVec) / textureXVecLen2, dot(p - textureOrigin, textureYVec) / textureYVecLen2);
-	else 
+	if (textured) {
+		Vector ans = triEquationSolver(textureXVec, textureYVec, N, p - textureOrigin);
+		return texture->getColor(ans.x, ans.y);
+	} else 
 		return bgColor;
 }

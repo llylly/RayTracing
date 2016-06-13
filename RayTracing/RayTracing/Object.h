@@ -22,10 +22,10 @@ public:
 	double refractFactor, refractN, beerConst;
 
 	double textureXVecLen, textureYVecLen;
-	BMP texture;
+	BMP *texture;
 
 	Object();
-	Object(Vector _position, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, string _texturePath, double _diffuseFactor, double _specularFactor, int _specularPower,
+	Object(Vector _position, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, BMP *_texture, double _diffuseFactor, double _specularFactor, int _specularPower,
 		double _reflectFactor, double _diffuseReflectValue, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst);
 	~Object();
 

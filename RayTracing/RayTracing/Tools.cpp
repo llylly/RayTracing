@@ -23,3 +23,12 @@ string intToString(int x) {
 		s = "-" + s;
 	return s;
 }
+
+Vector triEquationSolver(const Vector& a, const Vector &b, const Vector &c, const Vector &d) {
+	Vector ans;
+	double divi = det3(a, b, c);
+	ans.x = det3(d, b, c) / divi;
+	ans.y = det3(a, d, c) / divi;
+	ans.z = det3(a, b, d) / divi;
+	return ans;
+}

@@ -12,6 +12,7 @@
 #include "Plane.h"
 #include "Mesh.h"
 #include "TriMesh.h"
+#include "BMP.h"
 
 using namespace std;
 

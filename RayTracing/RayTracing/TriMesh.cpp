@@ -4,18 +4,39 @@
 
 TriMesh::TriMesh(): Mesh() {
 	type = "TriMesh";
+	smoothN = false;
 }
 
-TriMesh::TriMesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, string _texturePath, double _diffuseFactor, double _specularFactor, int _specularPower,
+TriMesh::TriMesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, BMP *_texture, double _diffuseFactor, double _specularFactor, int _specularPower,
 		double _reflectFactor, double _diffuseReflectValue, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst, bool _recalNormal)
-		: Mesh(_normal, _points, _tot, _color, _textured, _textureOrigin, _textureXVec, _textureYVec, _texturePath, _diffuseFactor, _specularFactor, _specularPower,
+		: Mesh(_normal, _points, _tot, _color, _textured, _textureOrigin, _textureXVec, _textureYVec, _texture, _diffuseFactor, _specularFactor, _specularPower,
 		_reflectFactor, _diffuseReflectValue, _environmentFactor, _refractFactor, _refractN, _beerConst, _recalNormal) {
 	type = "TriMesh";
+	smoothN = false;
 	//XFac = (points->at(0) - points->at(1)).y * (points->at(0) - points->at(2)).z - (points->at(0) - points->at(1)).z * (points->at(0) - points->at(2)).y;
 	//YFac = (points->at(0) - points->at(1)).z * (points->at(0) - points->at(2)).x - (points->at(0) - points->at(1)).x * (points->at(0) - points->at(2)).z;
 	//ZFac = (points->at(0) - points->at(1)).x * (points->at(0) - points->at(2)).y - (points->at(0) - points->at(1)).y * (points->at(0) - points->at(2)).x;
 }
-	
+
+void TriMesh::setSmooth(const vector<Vector> &_pns) {
+	pns.clear();
+	for (vector<Vector>::const_iterator i = _pns.cbegin(); i != _pns.cend(); i++) {
+		pns.push_back(*i);
+	}
+	this->smoothN = true;
+}
+
+bool TriMesh::getNormal(const Vector &p, Vector &N) {
+	// guarantee p is on the mesh
+	if (abs(dot(this->normal, p - position))>EPS) return false;
+	if (!this->smoothN) {
+		N = this->N;
+	} else {
+		Vector coef = triEquationSolver(points->at(0), points->at(1), points->at(2), p);
+		N = coef.x * pns.at(0) + coef.y * pns.at(1) + coef.z * pns.at(2);
+	}
+	return true;
+}
 
 TriMesh::~TriMesh() {
 }

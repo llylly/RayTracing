@@ -66,6 +66,13 @@ RayTracer::RayTracer(string configIn, string imageOut) {
 	for (vector<pair<map<string, string>, vector<map<string, string>>>>::const_iterator i = config->getSetConf().begin(); i != config->getSetConf().end(); i++) 
 		sets.push_back(setFactory->newSet(*i));
 
+	//KDTreeBuild
+	for (vector<Set*>::iterator i = sets.begin(); i != sets.end(); i++) {
+		cerr << "Build Kd-tree for a set" <<endl;
+		(*i)->buildKDTree();
+		cout << (*i)->box.Xmin << " " << (*i)->box.Xmax << " " << (*i)->box.Ymin << " " << (*i)->box.Ymax << 
+			" " << (*i)->box.Zmin << " " << (*i)->box.Zmax << endl;
+	}
 }
 
 RayTracer::~RayTracer() {
@@ -120,7 +127,6 @@ void RayTracer::threadProc(int s) {
 				double kX = 1.0f - 2.0f * (double)j / (double)getRenderWidth();
 				Vector direction = half - kX * camera->xDirec;
 				Ray nowRay = Ray(origin, normalize(direction));
-				
 				image->set(work(nowRay), j, i);
 				if (config->displayOn) RenderView::imgDisplay(image, j, i);
 			}
@@ -138,6 +144,7 @@ Color RayTracer::objWork(const Ray& r, Vector interceptP, double co, Object* sel
 	}
 	for (vector<Light*>::const_iterator i = lights.begin(); i != lights.end(); i++) {
 		if ((*i)->type == "PointLight") {
+			if (selected->diffuseFactor + selected->specularFactor < EPS) continue;
 			if (collide(((PointLight*)(*i))->position, interceptP)) continue;
 			if (selected->diffuseFactor > EPS) {
 				double d = dot(normalize(((PointLight*)(*i))->position - interceptP), normal);

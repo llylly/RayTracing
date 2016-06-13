@@ -4,12 +4,16 @@
 #include <vector>
 #include "Color.h"
 #include "Object.h"
+#include "Mesh.h"
+#include "KDNode.h"
+#include "Enclosure.h"
 
 class Set {
 public:
+
 	Color bgColor;
 	bool textured;
-	string texturePath;
+	BMP *texture;
 	double diffuseFactor, specularFactor;
 	int specularPower;
 	double reflectFactor, diffuseReflectValue, environmentFactor;
@@ -21,11 +25,16 @@ public:
 	Vector displace;
 	double XRotateAngle, YRotateAngle, ZRotateAngle;
 
+	KDNode *KDRoot;
+	Enclosure box;
+
 	Set();
 	~Set();
 	void addObj(Object *obj);
 
 	bool intercept(const Ray&, Vector&, Object *(&obj));
+
+	void buildKDTree();
 
 private:
 	vector<Object*> *objSet;

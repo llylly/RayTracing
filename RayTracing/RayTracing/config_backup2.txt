@@ -1,0 +1,102 @@
+//Config Resolution
+Resolution = 1366 x 768
+
+//Config AntiAliasing
+AntiAliasingOn = 1
+AntiAliasingFactor = 1
+
+//config display
+DisplayOn = 0
+
+//config diffuse reflection times
+DiffuseReflectTimes = 20
+
+//config decay limit
+LimitCoefficient = 0.005
+
+//config threadnum
+TotThread = 7
+
+//config camera
+Camera {
+	EyePosition = 0.0 1.0 1.0
+	Position = 0.0 1.0 0.0
+	XLength = 1.0
+	Orient = 0.0 1.0 0.0
+}
+
+//config light
+
+// plane light
+/*
+Light {
+	Type = Plane
+	Origin = 1.0 4.99 -15.0
+	XVector = -2.0 0.0 0.0
+	YVector = 0.0 0.0 -5.0
+	XDiv = 10
+	YDiv = 10
+	Color = 255 255 255
+}
+*/
+Light {
+	Type = Point
+	Position = 0.0 4.99 -12.5
+	Color = 255 255 255
+	HaloColor = 30
+}
+
+//object
+Set {
+	Color = 255 255 255
+	EnvironmentFactor = 0.1
+	DiffuseFactor = 0.6
+	SpecularFactor = 0.4
+	SpecularPower = 30
+	ReflectFactor = 0.0
+	RefractFactor = 0.0
+	RefractN = 1.03
+	BeerConst = 0.15
+	UnitedStyle = 1
+	XRotateAngle = 90
+	YRotateAngle = 30
+	Displacement = 0 -40 -150
+	ImportObj = "object/Chiang/ChiangMemorial2.obj"
+}
+/*
+//object
+Set {
+	Color = 255 255 255
+	EnvironmentFactor = 0.1
+	DiffuseFactor = 0.6
+	SpecularFactor = 0.4
+	SpecularPower = 30
+	ReflectFactor = 0.0
+	RefractFactor = 0.0
+	RefractN = 1.01
+	BeerConst = 0.15
+	UnitedStyle = 1
+	XRotateAngle = 90
+	YRotateAngle = 30
+	Displacement = 0 0 -100
+	ImportObj = "object/block.obj"
+}
+*/
+// back wall
+Object {
+	Type = Plane
+	Normal = 0.0 0.0 1.0
+	Position = 0.0 0.0 -2000.0
+	Color = 0 255 255
+	UseTexture = 1
+	TexturePath = "texture/3.bmp"
+	TextureXVec = 5.0 0.0 0.0
+	TextureYVec = 0.0 5.0 0.0
+	TextureOrigin = 0.0 0.0 0.0
+	EnvironmentFactor = 0.0
+	DiffuseFactor = 0.5
+	SpecularFactor = 0.3
+	SpecularPower = 30
+	ReflectFactor = 0.2
+	DiffuseReflectValue = 0.0
+}

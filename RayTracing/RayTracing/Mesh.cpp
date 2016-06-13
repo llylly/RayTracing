@@ -1,13 +1,16 @@
 #define EPS 1e-6
+#define INF 1e+20
 #include "Mesh.h"
+#include "Tools.h"
 
 Mesh::Mesh() {
 	pointTot = 0;
 	points = new vector<Vector>;
+	box = 0;
 	type = "Mesh";
 }
 
-Mesh::Mesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, string _texturePath, double _diffuseFactor, double _specularFactor, int _specularPower,
+Mesh::Mesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, BMP *_texture, double _diffuseFactor, double _specularFactor, int _specularPower,
 		double _reflectFactor, double _diffuseReflectValue, double _environmentFactor, double _refractFactor, double _refractN, double _beerConst, bool _recalNormal) {
 	pointTot = _tot;
 	points = new vector<Vector>;
@@ -18,7 +21,7 @@ Mesh::Mesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, bool
 	}
 	type = "Mesh";
 	position = points->at(0);
-	bgColor = _color, textured = _textured, textureOrigin = _textureOrigin, textureXVec = _textureXVec, textureYVec = _textureYVec, texturePath = _texturePath,
+	bgColor = _color, textured = _textured, textureOrigin = _textureOrigin, textureXVec = _textureXVec, textureYVec = _textureYVec, texture = _texture,
 		diffuseFactor = _diffuseFactor, specularFactor = _specularFactor, specularPower = _specularPower,
 		reflectFactor = _reflectFactor, diffuseReflectValue = _diffuseReflectValue, environmentFactor = _environmentFactor,
 				refractFactor = _refractFactor, refractN = _refractN;
@@ -34,9 +37,9 @@ Mesh::Mesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, bool
 		calTextureVec(normal);
 		textureXVecLen = getLength(textureXVec),
 			textureYVecLen = getLength(textureYVec);
-		textureXVecLen2 = textureXVecLen * textureXVecLen,
-		textureYVecLen2 = textureYVecLen * textureYVecLen;
-		texture.open(_texturePath);
+		//textureXVecLen2 = textureXVecLen * textureXVecLen,
+		//	textureYVecLen2 = textureYVecLen * textureYVecLen;
+		// gaurantee texture origin in the plane
 		textureOrigin += dot(position - textureOrigin, normal) * N;
 	}
 }
@@ -83,8 +86,23 @@ bool Mesh::getNormal(const Vector &p, Vector &N) {
 }
 
 Color Mesh::getColor(const Vector &p) {
-	if (textured)
-		return texture.getColor(dot(p - textureOrigin, textureXVec) / textureXVecLen2, dot(p - textureOrigin, textureYVec) / textureYVecLen2);
-	else 
+	if (textured) {
+		Vector ans = triEquationSolver(textureXVec, textureYVec, normal, p - textureOrigin);
+		return texture->getColor(ans.x, ans.y);
+		//return texture->getColor(dot(p - textureOrigin, textureXVec) / textureXVecLen2, dot(p - textureOrigin, textureYVec) / textureYVecLen2);
+	} else 
 		return bgColor;
+}
+
+void Mesh::calEnclosure() {
+	double xmax = -INF, xmin = INF, ymax = -INF, ymin = INF, zmax = -INF, zmin = INF;
+	for (vector<Vector>::iterator i = points->begin(); i != points->end(); i++) {
+		if (i->x > xmax) xmax = i->x;
+		if (i->x < xmin) xmin = i->x;
+		if (i->y > ymax) ymax = i->y;
+		if (i->y < ymin) ymin = i->y;
+		if (i->z > zmax) zmax = i->z;
+		if (i->z < zmin) zmin = i->z;
+	}
+	box = new Enclosure(xmin, xmax, ymin, ymax, zmin, zmax);
 }
