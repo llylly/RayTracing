@@ -125,7 +125,7 @@ void PhotonMapper::threadProc(int s, int ran_seed, vector<Photon*> *threadSet) {
 			double t1 = double(rand()) / double(RAND_MAX), t2 = double(rand()) / double(RAND_MAX), t3 = double(rand()) / double(RAND_MAX);
 			double theta = acos(1.0f - t2);
 			double alpha = t3 * 2.0f * PI;
-			if (t1 > 0.5f) theta = -theta;
+			if (t1 > 0.5f) theta += PI;
 			Photon *p = new Photon(((PointLight*)nowL)->position, Vector(cos(theta), sin(theta) * sin(alpha), sin(theta) * cos(alpha)), ((PointLight*)nowL)->color);
 			if (photonWork(p))
 				threadSet->push_back(p);
@@ -133,13 +133,18 @@ void PhotonMapper::threadProc(int s, int ran_seed, vector<Photon*> *threadSet) {
 		if (nowL->type == "PlaneLight") {
 			double t2 = double(rand()) / double(RAND_MAX), t3 = double(rand()) / double(RAND_MAX);
 			double theta = acos(1.0f - t2);
+			//double theta = t2 * PI / 2.0f;
 			double alpha = t3 * 2.0f * PI;
 			Vector x = ((PlaneLight*)nowL)->xVec, z = ((PlaneLight*)nowL)->N, y = cross(x, z);
 			x = normalize(x), y = normalize(y);
 			Vector orient = sin(theta) * sin(alpha) * x + sin(theta) * cos(alpha) * y + cos(theta) * z;
 			Photon *p = new Photon(((PlaneLight*)nowL)->origin + double(rand()) / double(RAND_MAX) * ((PlaneLight*)nowL)->xVec + double(rand()) / double(RAND_MAX) * ((PlaneLight*)nowL)->yVec, orient, ((PlaneLight*)nowL)->color);
+			Photon *stay = new Photon(*p);
 			if (photonWork(p)) {
-				threadSet->push_back(p);
+				//if (double(rand()) / double(RAND_MAX) > 0.5f) 
+					threadSet->push_back(p); 
+				//else 
+				//	threadSet->push_back(stay);
 			}
 		}
 	}
@@ -241,6 +246,7 @@ bool PhotonMapper::objWork(Photon *p, Vector interceptP, Object *selected) {
 		Vector normal;
 		selected->getNormal(interceptP, normal);
 		p->color *= -dot(p->direction, normal);
+		p->origin = interceptP;
 		return true;
 	}
 }
@@ -365,9 +371,9 @@ Color PhotonMapper::photonColor(const Vector &p) {
 	traverseTree(p, root, selected);
 	Color now = Color(0.0f, 0.0f, 0.0f);
 	double r = R2;
-	//if (selected->size() == config->photonN) 
-	//	r = selected->top().len;
-	r *= (selected->size() + config->photonN);
+	if (selected->size() == config->photonN) 
+		r = selected->top().len;
+	//r *= (selected->size() + config->photonN);
 	/*
 	for (vector<SimplePhoton>::const_iterator i = selected->cbegin(); i != selected->cend(); i++) {
 		Color tmp = i->c * (1.0f - i->len * config->photonK / R2);
@@ -379,8 +385,8 @@ Color PhotonMapper::photonColor(const Vector &p) {
 	while (!selected->empty()) {
 		SimplePhoton n = selected->top();
 		selected->pop();
-		//Color tmp = n.c * (1.0f - n.len * config->photonK / R2);
-		//now += tmp;
+		//if (n.len * config->photonK * config->photonK < R2)
+		//	now += n.c * (1.0f - sqrt(n.len) * config->photonK / config->photonR);
 		now += n.c;
 	}
 	

@@ -1,5 +1,5 @@
 //Config Resolution
-Resolution = 400 x 300
+Resolution = 1920 x 1080
 
 //Config AntiAliasing
 AntiAliasingOn = 1
@@ -16,14 +16,14 @@ LimitCoefficient = 0.003
 
 //config Photon Mapping
 PhotonMapping = 1
-PhotonLuminosity = 0.001
+PhotonLuminosity = 1300
 PhotonTot = 100000
 //weight generate F
 PhotonK = 1.0
 //pick radius max
-PhotonR = 5.0
+PhotonR = 30.0
 //pick N photons for estimate
-PhotonN = 320
+PhotonN = 160
 
 //config threadnum
 TotThread = 7
@@ -59,7 +59,6 @@ Light {
 	HaloColor = 30
 }
 */
-
 //config objects
 Object {
 	Type = Sphere
@@ -99,8 +98,8 @@ Set {
 	SpecularPower = 30
 	ReflectFactor = 0.0
 	RefractFactor = 0.7
-	RefractN = 1.1
-	BeerConst = 0.1
+	RefractN = 1.3
+	BeerConst = 0.15
 
 	UnitedStyle = 1
 	XRotateAngle = 0
@@ -124,13 +123,13 @@ Object {
 	SpecularFactor = 0.05
 	SpecularPower = 30
 	RefractFactor = 0.7
-	RefractN = 1.1
+	RefractN = 1.3
 	BeerConst = 0.15
 }
 */
 
 //cube
-
+/*
 Set {
 	Color = 24 141 180
 	EnvironmentFactor = 0.2
@@ -142,14 +141,14 @@ Set {
 	RefractN = 1.1
 	BeerConst = 0.15
 	UnitedStyle = 1
-	Displacement = -4 -0.99 -10
+	Displacement = -3 -0.99 -10
 	XRotateAngle = 0
 	YRotateAngle = 10
 	ZRotateAngle = 0
 	Scale = 1
 	ImportObj = "object/cube.obj"
 }
-
+*/
 
 // ground
 Object {

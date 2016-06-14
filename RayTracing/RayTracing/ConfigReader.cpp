@@ -168,7 +168,7 @@ void ConfigReader::readItem(const string& name, const string &value) {
 		istringstream is(value);
 		is >> config->totThread;
 	}
-	if (name == "PhotoMapping") {
+	if (name == "PhotonMapping") {
 		istringstream is(value);
 		is >> config->photonMapping;
 	}
