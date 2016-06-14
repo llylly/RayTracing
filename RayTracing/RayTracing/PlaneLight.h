@@ -7,7 +7,7 @@
 class PlaneLight : public Light {
 public:
 	PlaneLight();
-	PlaneLight(Vector _origin, Vector _xVec, Vector _yVec, int _xDiv, int _yDiv, Color _color);
+	PlaneLight(Vector _origin, Vector _xVec, Vector _yVec, Vector _normal, int _xDiv, int _yDiv, Color _color);
 	~PlaneLight();
 
 	Vector origin, xVec, yVec;

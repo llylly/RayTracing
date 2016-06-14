@@ -21,16 +21,27 @@ RenderView::RenderView(int argc, char** argv, int _width, int _height) {
 }
 
 void RenderView::display() {
-	cout<<"Begin~"<<endl;
 	glMatrixMode(GL_MODELVIEW);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	static bool rendered = false;
 	if ((R) && (!rendered)) {
 		rendered = true;
+		PhotonMapper::setConfig(RayTracer::getConfig());
+		PhotonMapper::setImage(RayTracer::getImage());
+		PhotonMapper::setLights(RayTracer::getLights());
+		PhotonMapper::setCamera(RayTracer::getCamera());
+		PhotonMapper::setObjects(RayTracer::getObjects());
+		PhotonMapper::setSets(RayTracer::getSets());
+		cerr << "PhotonMapper start" << endl;
+		PhotonMapper::run();
+		cerr << "PhotonMapper end" << endl;
+		cerr << "RayTracer start" << endl;
 		R->run();
+		cerr << "RayTracer end" << endl;
+		cerr << "Saving..." << endl;
 		R->save();
-		cout<<"Finish~"<<endl;
+		cerr<<"Finish~"<<endl;
 	}	
 }
 

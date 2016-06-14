@@ -102,15 +102,12 @@ void RayTracer::run() {
 	Vector half, origin = camera->center, direction;
 	Ray nowRay;
 
-	int *threadData = new int[config->totThread];
 	thread *threadSet = new thread[config->totThread];
 	for (int i=0; i<config->totThread; i++) {
-		threadData[i] = i,
 		threadSet[i] = thread(threadProc, i);
 	}
 	for (int i=0; i<config->totThread; i++)
 		threadSet[i].join();
-	delete[] threadData;
 	delete[] threadSet;
 }
 
@@ -123,7 +120,7 @@ void RayTracer::threadProc(int s) {
 			double kY = 1.0f - 2.0f * (double)i / (double)getRenderHeight();
 			Vector half = origin - camera->eye - kY * camera->yDirec;
 			for (int j=0; j<getRenderWidth(); ++j) {
-				//cerr<<i<<" "<<j<<endl;
+				//cerr << i << " " << j << endl;
 				double kX = 1.0f - 2.0f * (double)j / (double)getRenderWidth();
 				Vector direction = half - kX * camera->xDirec;
 				Ray nowRay = Ray(origin, normalize(direction));
@@ -142,6 +139,7 @@ Color RayTracer::objWork(const Ray& r, Vector interceptP, double co, Object* sel
 	if (selected->environmentFactor > EPS) {
 		ans += selected->environmentFactor * selected->getColor(interceptP);
 	}
+	ans += PhotonMapper::photonColor(interceptP);
 	for (vector<Light*>::const_iterator i = lights.begin(); i != lights.end(); i++) {
 		if ((*i)->type == "PointLight") {
 			if (selected->diffuseFactor + selected->specularFactor < EPS) continue;
@@ -346,4 +344,28 @@ bool RayTracer::collide(const Vector &S, const Vector &T) {
 		return true;
 	else
 		return false;
+}
+
+Config *RayTracer::getConfig() {
+	return config;
+}
+
+Image *RayTracer::getImage() {
+	return image;
+}
+
+vector<Light*> *RayTracer::getLights() {
+	return &lights;
+}
+
+Camera *RayTracer::getCamera() {
+	return camera;
+}
+
+vector<Object*> *RayTracer::getObjects() {
+	return &objects;
+}
+
+vector<Set*> *RayTracer::getSets() {
+	return &sets;
 }

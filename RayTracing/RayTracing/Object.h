@@ -5,6 +5,7 @@
 #include "Ray.h"
 #include "Vector.h"
 #include "BMP.h"
+#include "PhotonMapper.h"
 
 struct RayTracer;
 

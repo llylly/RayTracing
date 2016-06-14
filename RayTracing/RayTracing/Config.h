@@ -17,6 +17,11 @@ public:
 	int diffuseReflectionTimes;
 	int totThread;
 
+	bool photonMapping;
+	double photonLuminosity;
+	int photonTot, photonN;
+	double photonR, photonK;
+
 	Config();
 	~Config();
 	void addObjectConf(const map<string, string> &conf);

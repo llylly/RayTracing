@@ -2,9 +2,6 @@
 
 Color &Color::operator+=(const Color &b) {
 	R += b.R, G += b.G, B += b.B;
-	R = (R>=1.0f)?1.0f: R;
-	G = (G>=1.0f)?1.0f: G;
-	B = (B>=1.0f)?1.0f: B;
 	return *this;
 }
 
@@ -37,6 +34,10 @@ Color operator*(const Color &b, double fac) {
 
 Color operator*(const Color &a, const Color &b) {
 	return Color(a.R * b.R, a.G * b.G, a.B * b.B);
+}
+
+Color operator+(const Color &a, const Color &b) {
+	return Color(a.R + b.R, a.G + b.G, a.B + b.B);
 }
 
 Color operator/(const Color &b, double fac) {

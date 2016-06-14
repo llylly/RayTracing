@@ -168,4 +168,28 @@ void ConfigReader::readItem(const string& name, const string &value) {
 		istringstream is(value);
 		is >> config->totThread;
 	}
+	if (name == "PhotoMapping") {
+		istringstream is(value);
+		is >> config->photonMapping;
+	}
+	if (name == "PhotonLuminosity") {
+		istringstream is(value);
+		is >> config->photonLuminosity;
+	}
+	if (name == "PhotonTot") {
+		istringstream is(value);
+		is >> config->photonTot;
+	}
+	if (name == "PhotonR") {
+		istringstream is(value);
+		is >> config->photonR;
+	}
+	if (name == "PhotonK") {
+		istringstream is(value);
+		is >> config->photonK;
+	}
+	if (name == "PhotonN") {
+		istringstream is(value);
+		is >> config->photonN;
+	}
 }

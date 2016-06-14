@@ -11,10 +11,9 @@ PlaneLight::PlaneLight() {
 PlaneLight::~PlaneLight() {
 }
 
-PlaneLight::PlaneLight(Vector _origin, Vector _xVec, Vector _yVec, int _xDiv, int _yDiv, Color _color) {
+PlaneLight::PlaneLight(Vector _origin, Vector _xVec, Vector _yVec, Vector _normal, int _xDiv, int _yDiv, Color _color) {
 	origin = _origin, xVec = _xVec, yVec = _yVec,
-		xDiv = _xDiv, yDiv = _yDiv, color = _color;
-	N = normalize(cross(xVec, yVec));
+		N = _normal, xDiv = _xDiv, yDiv = _yDiv, color = _color;
 	type = "PlaneLight";
 }
 

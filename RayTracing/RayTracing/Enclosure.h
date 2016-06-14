@@ -14,6 +14,7 @@ public:
 
 	bool inBox(const Vector&);
 	Enclosure &operator+=(const Enclosure&);
+	Enclosure &operator+=(const Vector&);
 
 	double area();
 

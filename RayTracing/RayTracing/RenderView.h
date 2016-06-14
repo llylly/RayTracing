@@ -6,6 +6,7 @@
 #include "GL/glut.h"
 
 #include "RayTracer.h"
+#include "PhotonMapper.h"
 #include "Image.h"
 
 class RenderView {

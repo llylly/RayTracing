@@ -73,12 +73,15 @@ void Image::save() {
 		for (int j=0; j<width; j++) {
 			int tr = arr[i][j].B * 256.0 - 0.50;
 			tr = (tr<0)?0:tr;
+			tr = (tr>255)?255:tr;
 			fout.put((char)tr);
 			tr = arr[i][j].G * 256.0 - 0.50;
 			tr = (tr<0)?0:tr;
+			tr = (tr>255)?255:tr;
 			fout.put((char)tr);
 			tr = arr[i][j].R * 256.0 - 0.50;
 			tr = (tr<0)?0:tr;
+			tr = (tr>255)?255:tr;
 			fout.put((char)tr);
 		}
 		if (lineData & 3) {

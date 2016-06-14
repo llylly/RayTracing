@@ -32,7 +32,7 @@ Light *LightFactory::newLight(const map<string, string> &conf) {
 		}
 		light = new PointLight(position, color, haloFactor);
 	} else if (conf.at("Type") == "Plane") {
-		Vector origin, xVec, yVec;
+		Vector origin, xVec, yVec, normal;
 		int xDiv = 1, yDiv = 1;
 		Color color = Color(1.0f, 1.0f, 1.0f);
 		for (map<string, string>::const_iterator i = conf.begin(); i != conf.end(); i++) {
@@ -52,6 +52,11 @@ Light *LightFactory::newLight(const map<string, string> &conf) {
 				is >> _x >> _y >> _z;
 				yVec = Vector(_x, _y, _z);
 			}
+			if (i->first == "Normal") {
+				double _x, _y, _z;
+				is >> _x >> _y >> _z;
+				normal = Vector(_x, _y, _z);
+			}
 			if (i->first == "XDiv") {
 				is >> xDiv;
 			}
@@ -64,7 +69,7 @@ Light *LightFactory::newLight(const map<string, string> &conf) {
 				color = Color((double)_r / 255.0f, (double)_g / 255.0f, (double)_b / 255.0f);
 			}
 		}
-		light = new PlaneLight(origin, xVec, yVec, xDiv, yDiv, color); 
+		light = new PlaneLight(origin, xVec, yVec, normal, xDiv, yDiv, color); 
 	} else {
 		light = new Light();
 	}

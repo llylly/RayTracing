@@ -21,6 +21,8 @@
 
 using namespace std;
 
+class RenderView;
+
 struct RayTracer {
 public:
 	static string configIn, imageOut;
@@ -51,5 +53,14 @@ private:
 	static Color refractOutWork(const Ray& r, double co);
 
 	static bool getCrossedObj(const Ray &r, Vector& crossPoint, Object *(&crossObj), Light *(&crossLight));
+
+	static Config *getConfig();
+	static Image *getImage();
+	static vector<Light*> *getLights();
+	static Camera *getCamera();
+	static vector<Object*> *getObjects();
+	static vector<Set*> *getSets();
+
+	friend RenderView;
 };
 #endif

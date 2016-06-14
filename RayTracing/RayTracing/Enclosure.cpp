@@ -30,6 +30,16 @@ Enclosure &Enclosure::operator+=(const Enclosure &b) {
 	return *this;
 }
 
+Enclosure &Enclosure::operator+=(const Vector &b) {
+	this->Xmin = (b.x < this->Xmin)? b.x : this->Xmin;
+	this->Ymin = (b.y < this->Ymin)? b.y : this->Ymin;
+	this->Zmin = (b.z < this->Zmin)? b.z : this->Zmin;
+	this->Xmax = (b.x > this->Xmax)? b.x : this->Xmax;
+	this->Ymax = (b.y > this->Ymax)? b.y : this->Ymax;
+	this->Zmax = (b.z > this->Zmax)? b.z : this->Zmax;
+	return *this;
+}
+
 Enclosure operator+(const Enclosure &a, const Enclosure &b) {
 	Enclosure n(min(a.Xmin, b.Xmin), max(a.Xmax, b.Xmax), min(a.Ymin, b.Ymin), max(a.Ymax, b.Ymax), min(a.Zmin, b.Zmin), max(a.Zmax, b.Zmax));
 	return n;
