@@ -29,6 +29,8 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 
 	Vector normal; // pour le plane
 
+	double causticTot = 0; // pour le sphere et le mesh
+
 	Type = conf.at("Type");
 
 	for (map<string, string>::const_iterator i = conf.begin(); i != conf.end(); i++) {
@@ -104,18 +106,35 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 				normal = normalize(normal);
 			}
 		}
+
+		if (Type == "Sphere") {
+			if (i->first == "CausticTot") {
+				is >> causticTot;
+			}
+		}
 	}
 	BMP *texture;
 	if (textured) 
 		texture = new BMP(texturePath);
 	if (Type == "Sphere") {
-		now = new Sphere(position, color, textured, textureOrigin, textureXVec, textureYVec, texture, radius, diffuseFactor, specularFactor, specularPower, 
-			reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+		now = new Sphere(position, color,
+			textured, textureOrigin, textureXVec, textureYVec, texture,
+			radius,
+			diffuseFactor, specularFactor, specularPower, 
+			reflectFactor, diffuseReflectValue, environmentFactor,
+			refractFactor, refractN, beerConst,
+			causticTot);
 	} else
 	if (Type == "Plane") {
-		now = new Plane(normal, position, color, textured, textureOrigin, textureXVec, textureYVec, texture, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+		now = new Plane(normal, position, color,
+			textured, textureOrigin, textureXVec, textureYVec, texture,
+			diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor,
+			refractFactor, refractN, beerConst);
 	} else {
-		now = new Object(position, color, textured, textureOrigin, textureXVec, textureYVec, texture, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+		now = new Object(position, color, 
+			textured, textureOrigin, textureXVec, textureYVec, texture, 
+			diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor,
+			refractN, beerConst);
 	}
 	if ((Type == "Mesh") || (Type == "TriMesh")) {
 		vector<Vector> *points = new vector<Vector>();
@@ -128,9 +147,15 @@ Object *ObjectFactory::newObj(const map<string, string> &conf) {
 			tot++;
 		}
 		if (points->size() == 3)
-			now = new TriMesh(normal, points, tot, color, textured, textureOrigin, textureXVec, textureYVec, texture, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+			now = new TriMesh(normal, points, tot, color,
+			textured, textureOrigin, textureXVec, textureYVec, texture,
+			diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor,
+			refractFactor, refractN, beerConst);
 		else
-			now = new Mesh(normal, points, tot, color, textured, textureOrigin, textureXVec, textureYVec, texture, diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor, refractFactor, refractN, beerConst);
+			now = new Mesh(normal, points, tot, color,
+			textured, textureOrigin, textureXVec, textureYVec, texture,
+			diffuseFactor, specularFactor, specularPower, reflectFactor, diffuseReflectValue, environmentFactor,
+			refractFactor, refractN, beerConst);
 	}
 
 		

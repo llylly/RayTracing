@@ -26,7 +26,7 @@ PhotonN = 320
 
 //config Caustic Mapping
 CausticMapping = 1
-CausticLuminosity = 0.0000001
+CausticLuminosity = 0.00001
 CausticK = 1.0
 CausticR = 1.0
 CausticN = 100
@@ -40,9 +40,6 @@ Camera {
 	Position = -2.8 4.6 2.0
 	XLength = 1.0
 	Orient = 0.0 1.0 0.0
-	FocalR = 0.15
-	FocalRate = 12.0
-	SamplingN = 9
 }
 
 //config light
@@ -142,7 +139,7 @@ Object {
 }
 
 //config objects
-
+/*
 Object {
 	Type = Sphere
 	Position = 1.0 0.0 -12.0
@@ -170,7 +167,7 @@ Object {
 	ReflectFactor = 0.2
 	DiffuseReflectValue = 0.0
 }
-
+*/
 
 //green dragon
 //object
@@ -215,17 +212,35 @@ Set {
 	YRotateAngle = 0
 	ZRotateAngle = 0
 	Scale = 0.04
-	Displacement = -2.4 -0.99 -8
+	Displacement = -2.4 -0.99 -13.5
 	ImportObj = "object/VasoN.obj"
 
-	//CausticTot = 50000
+	CausticTot = 50000
 }
 
 
 /*
 Object {
 	Type = Sphere
-	Position = 0.0 1.0 -11
+	Position = 0.0 0.0 -13
+	Radius = 1.0
+	Color = 19 131 16
+	EnvironmentFactor = 0.2
+	DiffuseFactor = 0.05
+	SpecularFactor = 0.05
+	SpecularPower = 30
+	RefractFactor = 0.7
+	RefractN = 1.33
+	BeerConst = 0.15
+	CausticTot = 50000
+}
+*/
+
+//green ball
+/*
+Object {
+	Type = Sphere
+	Position = 0.0 0.0 -10
 	Radius = 1.0
 	Color = 19 131 16
 	EnvironmentFactor = 0.2
@@ -235,28 +250,8 @@ Object {
 	RefractFactor = 0.7
 	RefractN = 1.1
 	BeerConst = 0.15
-	CausticTot = 50000
 }
 */
-
-//green ball
-
-Object {
-	Type = Sphere
-	Position = 0.0 0.0 -10
-	Radius = 1.0
-	Color = 255 255 255
-	EnvironmentFactor = 0.1
-	DiffuseFactor = 0.05
-	SpecularFactor = 0.05
-	SpecularPower = 30
-	RefractFactor = 0.8
-	RefractN = 1.2
-	BeerConst = 0.15
-
-	CausticTot = 10000
-}
-
 
 //cube
 

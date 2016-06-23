@@ -2,6 +2,7 @@
 
 #define MAXINF 1e+20
 #define EPS 1e-6
+#define PI 3.1415926
 #include <string>
 #include <iostream>
 #include "RayTracer.h"
@@ -99,21 +100,32 @@ bool RayTracer::getDisplayOn() {
 }
 
 void RayTracer::run() {
+	Color centerC = PhotonMapper::photonColor(Vector(0.0f, -1.0f, -13.0f));
+	Color tmpb = PhotonMapper::photonColor(Vector(0.0f, -1.0f, -7.0f));
+	cerr << "centerC: " << centerC.R << " " << centerC.G << " " << centerC.B << endl;
+	cerr << "tmpb: " << tmpb.R << " " << tmpb.G << " " << tmpb.B << endl;
 	Vector half, origin = camera->center, direction;
 	Ray nowRay;
 
 	thread *threadSet = new thread[config->totThread];
 	for (int i=0; i<config->totThread; i++) {
-		threadSet[i] = thread(threadProc, i);
+		threadSet[i] = thread(threadProc, i, rand());
 	}
-	for (int i=0; i<config->totThread; i++)
-		threadSet[i].join();
+	for (int i=0; i<config->totThread; i++) {
+		threadSet[i].join(); 
+		cerr << "Thread " << i << " joined" << endl;
+	}
 	delete[] threadSet;
 }
 
-void RayTracer::threadProc(int s) {
+void RayTracer::threadProc(int s, int ran_seed) {
+	srand(ran_seed);
 	Vector origin = camera->center, direction;
 	Ray nowRay;
+
+	Color nowPixel;
+	Vector focus, startP;
+	double t1, t2;
 
 	for (int i = s; i < getRenderHeight(); i += config->totThread) {
 			cerr<<i<<endl;
@@ -123,9 +135,24 @@ void RayTracer::threadProc(int s) {
 				//cerr << i << " " << j << endl;
 				double kX = 1.0f - 2.0f * (double)j / (double)getRenderWidth();
 				Vector direction = half - kX * camera->xDirec;
-				Ray nowRay = Ray(origin, normalize(direction));
-				image->set(work(nowRay), j, i);
-				if (config->displayOn) RenderView::imgDisplay(image, j, i);
+				focus = camera->eye + camera->focalRate * direction;
+				nowPixel = Color(0.0f, 0.0f, 0.0f);
+				if (camera->focalR > EPS) {
+					for (int k=0; k < camera->samplingN; ++k) {
+						t1 = (double)rand() / (double)RAND_MAX;
+						t2 = (double)rand() / (double)RAND_MAX * 2.0f * PI;
+						startP = origin + t1 * cos(t2) * camera->deltaX + t1 * cos(t2) * camera->deltaY;
+						nowRay = Ray(startP , normalize(focus - startP));
+						nowPixel += work(nowRay);
+					}
+					nowPixel /= camera->samplingN;
+				} else {
+					nowPixel = work(Ray(origin, normalize(direction)));
+				}
+				image->set(nowPixel, j, i);
+				//Ray nowRay = Ray(origin, normalize(direction));
+				//image->set(work(nowRay), j, i);
+				//if (config->displayOn) RenderView::imgDisplay(image, j, i);
 			}
 	}
 }
@@ -139,7 +166,10 @@ Color RayTracer::objWork(const Ray& r, Vector interceptP, double co, Object* sel
 	if (selected->environmentFactor > EPS) {
 		ans += selected->environmentFactor * selected->getColor(interceptP);
 	}
-	ans += PhotonMapper::photonColor(interceptP);
+	if (config->photonMapping)
+		ans += PhotonMapper::photonColor(interceptP);
+	if (config->causticMapping)
+		ans += CausticMapper::photonColor(interceptP);
 	for (vector<Light*>::const_iterator i = lights.begin(); i != lights.end(); i++) {
 		if ((*i)->type == "PointLight") {
 			if (selected->diffuseFactor + selected->specularFactor < EPS) continue;
@@ -212,7 +242,7 @@ Color RayTracer::objWork(const Ray& r, Vector interceptP, double co, Object* sel
 			ans += selected->refractFactor * refractOutWork(refractRay, co * selected->refractFactor);
 		}
 	}
-	return ans;
+	return regular(ans);
 }
 
 Color RayTracer::refractOutWork(const Ray &r, double co) {

@@ -21,33 +21,33 @@ PhotonNode *PhotonMapper::root = 0;
 
 double PhotonMapper::R2 = 0.0f;
 
-void PhotonMapper::q_sort(int L, int R, int direc) {
+void PhotonMapper::q_sort(int L, int R, int direc, Photon **arr) {
 	int i = L, j = R;
 	Photon* t;
 	double S;
-	if (direc == 0) S = photonArr[(L+R)>>1]->origin.x;
-	if (direc == 1) S = photonArr[(L+R)>>1]->origin.y;
-	if (direc == 2) S = photonArr[(L+R)>>1]->origin.z;
+	if (direc == 0) S = arr[(L+R)>>1]->origin.x;
+	if (direc == 1) S = arr[(L+R)>>1]->origin.y;
+	if (direc == 2) S = arr[(L+R)>>1]->origin.z;
 	do {
 		if (direc == 0) {
-			while (photonArr[i]->origin.x < S - EPS) ++i;
-			while (photonArr[j]->origin.x > S + EPS) --j;
+			while (arr[i]->origin.x < S - EPS) ++i;
+			while (arr[j]->origin.x > S + EPS) --j;
 		} else if (direc == 1) {
-			while (photonArr[i]->origin.y < S - EPS) ++i;
-			while (photonArr[j]->origin.y > S + EPS) --j;
+			while (arr[i]->origin.y < S - EPS) ++i;
+			while (arr[j]->origin.y > S + EPS) --j;
 		} else if (direc == 2) {
-			while (photonArr[i]->origin.z < S - EPS) ++i;
-			while (photonArr[j]->origin.z > S + EPS) --j;
+			while (arr[i]->origin.z < S - EPS) ++i;
+			while (arr[j]->origin.z > S + EPS) --j;
 		}
 		if (i <= j) {
-			t = photonArr[i], photonArr[i] = photonArr[j], photonArr[j] = t;
+			t = arr[i], arr[i] = arr[j], arr[j] = t;
 			++i, --j;
 		}
 	} while (i <= j);
 	if (L < j) 
-		q_sort(L, j, direc);
+		q_sort(L, j, direc, arr);
 	if (i < R)
-		q_sort(i, R, direc);
+		q_sort(i, R, direc, arr);
 }
 
 PhotonMapper::PhotonMapper() {
@@ -110,7 +110,7 @@ void PhotonMapper::run() {
 	for (int i = 0; i < totPhoton; i++) {
 		root->e += photonArr[i]->origin;
 	}
-	buildPhotonTree(root, 0, totPhoton-1);
+	buildPhotonTree(root, 0, totPhoton-1, photonArr);
 	cerr << "Build Photon KD-Trees Finish" << endl;
 }
 
@@ -132,19 +132,16 @@ void PhotonMapper::threadProc(int s, int ran_seed, vector<Photon*> *threadSet) {
 		}
 		if (nowL->type == "PlaneLight") {
 			double t2 = double(rand()) / double(RAND_MAX), t3 = double(rand()) / double(RAND_MAX);
-			double theta = acos(1.0f - t2);
+			//double theta = acos(1.0f - t2);
 			//double theta = t2 * PI / 2.0f;
+			double theta = PI / 2.0f * sqrt(t2);
 			double alpha = t3 * 2.0f * PI;
 			Vector x = ((PlaneLight*)nowL)->xVec, z = ((PlaneLight*)nowL)->N, y = cross(x, z);
 			x = normalize(x), y = normalize(y);
 			Vector orient = sin(theta) * sin(alpha) * x + sin(theta) * cos(alpha) * y + cos(theta) * z;
 			Photon *p = new Photon(((PlaneLight*)nowL)->origin + double(rand()) / double(RAND_MAX) * ((PlaneLight*)nowL)->xVec + double(rand()) / double(RAND_MAX) * ((PlaneLight*)nowL)->yVec, orient, ((PlaneLight*)nowL)->color);
-			Photon *stay = new Photon(*p);
 			if (photonWork(p)) {
-				//if (double(rand()) / double(RAND_MAX) > 0.5f) 
-					threadSet->push_back(p); 
-				//else 
-				//	threadSet->push_back(stay);
+				threadSet->push_back(p); 
 			}
 		}
 	}
@@ -156,14 +153,16 @@ bool PhotonMapper::photonWork(Photon *p) {
 
 	Color ans = Color(0.0f, 0.0f, 0.0f);
 
-	if (getCrossedObj(p, totCrossPoint, selected)) {
+	Set *tmps;
+	if (getCrossedObj(p, totCrossPoint, selected, tmps)) {
 		return objWork(p, totCrossPoint, selected);
 	} else
 		return false;
 }
 
-bool PhotonMapper::getCrossedObj(Photon *p, Vector &crossPoint, Object *(&crossObj)) {
+bool PhotonMapper::getCrossedObj(Photon *p, Vector &crossPoint, Object *(&crossObj), Set *(&crossSet)) {
 	crossObj = nullptr;
+	crossSet = nullptr;
 	double minDis = MAXINF;
 	Vector nowCrossPoint;
 	for (vector<Object*>::iterator i = objects.begin(); i != objects.end(); i++) {
@@ -181,6 +180,7 @@ bool PhotonMapper::getCrossedObj(Photon *p, Vector &crossPoint, Object *(&crossO
 			if ((getDistance2(p->origin, nowCrossPoint) < minDis) && (getDistance2(p->origin, nowCrossPoint) > EPS)) {
 				minDis = getDistance2(p->origin, nowCrossPoint);
 				crossObj = tmpCrossObj;
+				crossSet = *s;
 				crossPoint = nowCrossPoint;
 			}
 		}
@@ -245,7 +245,7 @@ bool PhotonMapper::objWork(Photon *p, Vector interceptP, Object *selected) {
 		// absorbed
 		Vector normal;
 		selected->getNormal(interceptP, normal);
-		p->color *= -dot(p->direction, normal);
+		//p->color *= -dot(p->direction, normal);
 		p->origin = interceptP;
 		return true;
 	}
@@ -256,8 +256,9 @@ bool PhotonMapper::refractOutWork(Photon *p) {
 	Object *selected = nullptr;
 	int times = 0;
 	Photon *nowR = p;
+	Set *tmps;
 	while (times <= 10) { //parameter's misery
-		if (getCrossedObj(p, totCrossPoint, selected)) {
+		if (getCrossedObj(p, totCrossPoint, selected, tmps)) {
 			Vector normal;
 			selected->getNormal(totCrossPoint, normal);
 			double nInv = 1.0f / selected->refractN;
@@ -291,7 +292,7 @@ bool PhotonMapper::refractOutWork(Photon *p) {
 	return false;
 }
 
-void PhotonMapper::buildPhotonTree(PhotonNode *p, int l, int r) {
+void PhotonMapper::buildPhotonTree(PhotonNode *p, int l, int r, Photon** photonArr) {
 	if (r-l <= 2) {
 		p->direc = 3;
 		for (int i=l; i<=r; i++)
@@ -321,7 +322,7 @@ void PhotonMapper::buildPhotonTree(PhotonNode *p, int l, int r) {
 			return;
 		}
 
-		q_sort(l, r, direc);
+		q_sort(l, r, direc, photonArr);
 		int mid = (l+r)>>1;
 		while (mid < r) {
 			if (direc == 0)
@@ -359,8 +360,8 @@ void PhotonMapper::buildPhotonTree(PhotonNode *p, int l, int r) {
 			p->left->border = photonArr[mid]->origin.z;
 			p->right->border = photonArr[mid+1]->origin.z;
 		}
-		buildPhotonTree(p->left, l, mid);
-		buildPhotonTree(p->right, mid+1, r);
+		buildPhotonTree(p->left, l, mid, photonArr);
+		buildPhotonTree(p->right, mid+1, r, photonArr);
 	}
 }
 
@@ -373,21 +374,10 @@ Color PhotonMapper::photonColor(const Vector &p) {
 	double r = R2;
 	if (selected->size() == config->photonN) 
 		r = selected->top().len;
-	//r *= (selected->size() + config->photonN);
-	/*
-	for (vector<SimplePhoton>::const_iterator i = selected->cbegin(); i != selected->cend(); i++) {
-		Color tmp = i->c * (1.0f - i->len * config->photonK / R2);
-		now += tmp;
-		now += i->c;
-	}
-	*/
 	
 	while (!selected->empty()) {
-		SimplePhoton n = selected->top();
+		now += selected->top().c;
 		selected->pop();
-		//if (n.len * config->photonK * config->photonK < R2)
-		//	now += n.c * (1.0f - sqrt(n.len) * config->photonK / config->photonR);
-		now += n.c;
 	}
 	
 	now *= config->photonLuminosity;

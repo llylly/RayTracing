@@ -45,3 +45,7 @@ Color operator/(const Color &b, double fac) {
 	ans.R/=fac, ans.G/=fac, ans.B/=fac;
 	return ans;
 }
+
+Color regular(const Color &a) {
+	return Color((a.R>1.0f)?1.0f:a.R, (a.G>1.0f)?1.0f:a.G, (a.B>1.0f)?1.0f:a.B);
+}

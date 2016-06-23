@@ -30,4 +30,6 @@ Color operator+(const Color&, const Color&);
 Color operator/(const Color&, double);
 Color operator/(const Color&, const Color&);
 
+Color regular(const Color&);
+
 #endif

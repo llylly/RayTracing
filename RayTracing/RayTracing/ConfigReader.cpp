@@ -184,12 +184,28 @@ void ConfigReader::readItem(const string& name, const string &value) {
 		istringstream is(value);
 		is >> config->photonR;
 	}
-	if (name == "PhotonK") {
-		istringstream is(value);
-		is >> config->photonK;
-	}
 	if (name == "PhotonN") {
 		istringstream is(value);
 		is >> config->photonN;
+	}
+	if (name == "CausticMapping") {
+		istringstream is(value);
+		is >> config->causticMapping;
+	}
+	if (name == "CausticLuminosity") {
+		istringstream is(value);
+		is >> config->causticLuminosity;
+	}
+	if (name == "CausticK") {
+		istringstream is(value);
+		is >> config->causticK;
+	}
+	if (name == "CausticR") {
+		istringstream is(value);
+		is >> config->causticR;
+	}
+	if (name == "CausticN") {
+		istringstream is(value);
+		is >> config->causticN;
 	}
 }

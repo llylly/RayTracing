@@ -15,6 +15,7 @@ class Object;
 class Set;
 class Camera;
 class Light;
+class CausticMapper;
 
 class PhotonMapper {
 public:
@@ -33,10 +34,10 @@ public:
 	static void threadProc(int s, int ran_seed, vector<Photon*> *threadSet);
 	static bool photonWork(Photon* p);
 	static bool objWork(Photon *p, Vector interceptP, Object* selected);
-	static bool getCrossedObj(Photon *p, Vector& crossPoint, Object *(&crossObj));
+	static bool getCrossedObj(Photon *p, Vector& crossPoint, Object *(&crossObj), Set *(&crossSet));
 	static bool refractOutWork(Photon *p);
 
-	static void buildPhotonTree(PhotonNode *p, int l, int r);
+	static void buildPhotonTree(PhotonNode *p, int l, int r, Photon**);
 
 	static Color photonColor(const Vector &p);
 
@@ -54,8 +55,10 @@ private:
 
 	static double R2;
 
-	static void q_sort(int L, int R, int direc);
+	static void q_sort(int L, int R, int direc, Photon **arr);
 	static void traverseTree(const Vector &p, const PhotonNode *now, priority_queue<SimplePhoton> *selected);
+
+	friend CausticMapper;
 };
 
 #endif

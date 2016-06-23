@@ -33,9 +33,13 @@ void RenderView::display() {
 		PhotonMapper::setCamera(RayTracer::getCamera());
 		PhotonMapper::setObjects(RayTracer::getObjects());
 		PhotonMapper::setSets(RayTracer::getSets());
+		CausticMapper::setR(RayTracer::getConfig());
 		cerr << "PhotonMapper start" << endl;
 		PhotonMapper::run();
 		cerr << "PhotonMapper end" << endl;
+		cerr << "CausticMapper start" << endl;
+		CausticMapper::run();
+		cerr << "CausticMapper end" << endl;
 		cerr << "RayTracer start" << endl;
 		R->run();
 		cerr << "RayTracer end" << endl;

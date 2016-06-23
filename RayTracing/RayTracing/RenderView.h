@@ -7,6 +7,7 @@
 
 #include "RayTracer.h"
 #include "PhotonMapper.h"
+#include "CausticMapper.h"
 #include "Image.h"
 
 class RenderView {

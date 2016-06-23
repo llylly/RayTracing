@@ -20,7 +20,12 @@ public:
 	bool photonMapping;
 	double photonLuminosity;
 	int photonTot, photonN;
-	double photonR, photonK;
+	double photonR;
+
+	bool causticMapping;
+	double causticLuminosity;
+	int causticN;
+	double causticK, causticR;
 
 	Config();
 	~Config();

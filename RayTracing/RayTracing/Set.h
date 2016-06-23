@@ -25,6 +25,8 @@ public:
 	Vector displace;
 	double XRotateAngle, YRotateAngle, ZRotateAngle;
 
+	int causticTot;
+
 	KDNode *KDRoot;
 	Enclosure box;
 

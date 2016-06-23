@@ -28,6 +28,15 @@ Camera::Camera(const map<string, string> &conf, int viewWidth, int viewHeight) {
 			is >> _x >> _y >> _z;
 			orient = Vector(_x, _y, _z);
 		}
+		if (i->first == "FocalR") {
+			is >> focalR;
+		}
+		if (i->first == "FocalRate") {
+			is >> focalRate;
+		}
+		if (i->first == "SamplingN") {
+			is >> samplingN;
+		}
 	}
 
 	yLength = xLength / (double)viewWidth * (double)viewHeight;
@@ -35,6 +44,8 @@ Camera::Camera(const map<string, string> &conf, int viewWidth, int viewHeight) {
 	xDirec = normalize(xDirec, xLength / 2.0f);
 	yDirec = cross(xDirec, center - eye);
 	yDirec = normalize(yDirec, yLength / 2.0f);
+	deltaX = normalize(xDirec, focalR);
+	deltaY = normalize(yDirec, focalR);
 }
 
 Camera::~Camera() {

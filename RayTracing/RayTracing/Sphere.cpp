@@ -15,7 +15,8 @@ Sphere::Sphere() {
 Sphere::Sphere(Vector _position, Color _bgColor, bool _textured, Vector _textureOrigin, Vector _textureXVec, Vector _textureYVec, BMP *_texture, double _radius, 
 		double _diffuseFactor, double _specularFactor, int _specularPower, 
 		double _reflectFactor, double _diffuseReflectValue, double _environmentFactor,
-		double _refractFactor, double _refractN, double _beerConst) {
+		double _refractFactor, double _refractN, double _beerConst,
+		int _causticTot) {
 	type = "Sphere";
 	position = _position, bgColor = _bgColor, textured = _textured, textureOrigin = _textureOrigin, textureXVec = _textureXVec, textureYVec = _textureYVec, texture = _texture,
 		radius = _radius, 
@@ -28,6 +29,7 @@ Sphere::Sphere(Vector _position, Color _bgColor, bool _textured, Vector _texture
 			textureYVecLen = getLength(textureYVec);
 		textureOrigin.z = 0.0f;	
 	}
+	causticTot = _causticTot;
 }
 
 Sphere::~Sphere() {

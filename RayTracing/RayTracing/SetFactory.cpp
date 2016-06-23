@@ -30,6 +30,8 @@ Set *SetFactory::newSet(pair<map<string, string>, vector<map<string, string>>> c
 	Vector displace = Vector(0.0f, 0.0f, 0.0f);
 	double XRotateAngle = 0.0f, YRotateAngle = 0.0f, ZRotateAngle = 0.0f;
 
+	int causticTot = 0;
+
 	for (map<string, string>::const_iterator i = conf.first.begin(); i != conf.first.end(); i++) {
 		istringstream is(i->second);
 		
@@ -98,6 +100,9 @@ Set *SetFactory::newSet(pair<map<string, string>, vector<map<string, string>>> c
 		if (i->first == "ZRotateAngle") {
 			is >> ZRotateAngle;
 		}
+		if (i->first == "CausticTot") {
+			is >> causticTot;
+		}
 	}
 	
 	for (vector<map<string, string>>::const_iterator i = conf.second.begin(); i != conf.second.end(); i++) {
@@ -128,6 +133,8 @@ Set *SetFactory::newSet(pair<map<string, string>, vector<map<string, string>>> c
 	now->XRotateAngle = XRotateAngle / 180.0f * PI;
 	now->YRotateAngle = YRotateAngle / 180.0f * PI;
 	now->ZRotateAngle = ZRotateAngle / 180.0f * PI;
+
+	now->causticTot = causticTot;
 	
 	// read obj file
 	if (fromImport) {

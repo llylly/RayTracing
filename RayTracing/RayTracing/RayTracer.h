@@ -47,7 +47,7 @@ private:
 	static vector<Object*> objects;
 	static vector<Set*> sets;
 
-	static void threadProc(int s);
+	static void threadProc(int s, int ran_seed);
 
 	static Color objWork(const Ray& r, Vector crossPoint, double co, Object* selected);
 	static Color refractOutWork(const Ray& r, double co);

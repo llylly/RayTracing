@@ -11,6 +11,9 @@ using namespace std;
 class Camera {
 public:
 	Vector eye, center, xDirec, yDirec;
+	Vector deltaX, deltaY;
+	double focalR, focalRate;
+	int samplingN;
 
 	Camera();
 	Camera(const map<string, string> &conf, int viewWidth, int viewHeight);
