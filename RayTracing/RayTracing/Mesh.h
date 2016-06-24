@@ -14,6 +14,8 @@ public:
 	int pointTot;
 	Enclosure *box;
 
+	int no; //for debug
+
 	//double textureXVecLen2, textureYVecLen2;
 
 	Mesh();

@@ -50,7 +50,7 @@ private:
 	static void threadProc(int s, int ran_seed);
 
 	static Color objWork(const Ray& r, Vector crossPoint, double co, Object* selected);
-	static Color refractOutWork(const Ray& r, double co);
+	static Color refractOutWork(const Ray& r, double co, Object *from);
 
 	static bool getCrossedObj(const Ray &r, Vector& crossPoint, Object *(&crossObj), Light *(&crossLight));
 

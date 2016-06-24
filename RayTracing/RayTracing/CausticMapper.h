@@ -18,7 +18,7 @@ public:
 	static void threadProc(int lightNo, int aimNo, int tot, vector<Photon*> *threadSet, int ran_seed);
 	static bool photonWork(Photon *p);
 	static bool objWork(Photon *p, Vector interceptP, Object* selected);
-	static bool refractOutWork(Photon *p);
+	static bool refractOutWork(Photon *p, Object *from);
 
 	static Color photonColor(const Vector &p);
 

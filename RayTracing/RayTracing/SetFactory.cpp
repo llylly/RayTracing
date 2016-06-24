@@ -196,6 +196,8 @@ void SetFactory::fromFile(Set* (&now)) {
 	string nowMtl = "";
 	BMP *nowBMP;
 
+	int totface = 0;
+
 	while (!fin.eof()) {
 		string nowline;
 		getline(fin, nowline);
@@ -274,6 +276,8 @@ void SetFactory::fromFile(Set* (&now)) {
 		}
 
 		if (type == "f") {
+			++totface;
+
 			vector<Vector> nowpoints = vector<Vector>();
 			vector<Vector> nowtpoints = vector<Vector>();
 			vector<Vector> nownpoints = vector<Vector>();
@@ -299,7 +303,18 @@ void SetFactory::fromFile(Set* (&now)) {
 					--t;
 					nowtpoints.push_back(vtque->at(t));
 				}
-				if ((fir != -1) && (fir != last)) {
+				if ((fir != -1) && (last - fir == 1)) {
+					hasN = true;
+					istringstream tmpin(nows.substr(0, fir));
+					int t; tmpin >> t;
+					--t;
+					nowpoints.push_back(vque->at(t));
+					istringstream tmptin(nows.substr(last+1, nows.length()-last-1));
+					tmptin >> t;
+					--t;
+					nownpoints.push_back(vnque->at(t));
+				}
+				if ((fir != -1) && (last - fir > 1)) {
 					hasN = true;
 					istringstream tmpin(nows.substr(0, fir));
 					int t; tmpin >> t;
@@ -331,8 +346,6 @@ void SetFactory::fromFile(Set* (&now)) {
 				texturePath = (*pathMap)[nowMtl];
 				Vector mPoint[3] = {nowtpoints[0], nowtpoints[1], nowtpoints[2]};
 				for (int i=0; i<3; i++) {
-					//if (mPoint[i].x < 0.0f) mPoint[i].x = -mPoint[i].x;
-					//if (mPoint[i].y < 0.0f) mPoint[i].y = -mPoint[i].y;
 					mPoint[i].z = 1;
 				}
 				Vector coef = triEquationSolver(mPoint[0], mPoint[1], mPoint[2], Vector(0.0f, 0.0f, 1.0f));
@@ -351,10 +364,12 @@ void SetFactory::fromFile(Set* (&now)) {
 					0.0f, 0.0f, 0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1);
 				if (hasN)
 					((TriMesh*)nowObj)->setSmooth(nownpoints);
+				((TriMesh*)nowObj)->no = totface;
 			} else {
 				nowObj = new Mesh
 				(Vector(0.0f, 0.0f, 0.0f), &nowpoints, nowpoints.size(), bgColor, textured, textureOrigin, textureXVec, textureYVec, nowBMP,
 				0.0f, 0.0f, 0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1);
+				((Mesh*)nowObj)->no = totface; 
 			}
 			now->addObj(nowObj);
 		}

@@ -131,8 +131,7 @@ void RayTracer::threadProc(int s, int ran_seed) {
 			cerr<<i<<endl;
 			double kY = 1.0f - 2.0f * (double)i / (double)getRenderHeight();
 			Vector half = origin - camera->eye - kY * camera->yDirec;
-			for (int j=0; j<getRenderWidth(); ++j) {
-				//cerr << i << " " << j << endl;
+			for (int j=0; j < getRenderWidth(); ++j) {
 				double kX = 1.0f - 2.0f * (double)j / (double)getRenderWidth();
 				Vector direction = half - kX * camera->xDirec;
 				focus = camera->eye + camera->focalRate * direction;
@@ -150,11 +149,9 @@ void RayTracer::threadProc(int s, int ran_seed) {
 					nowPixel = work(Ray(origin, normalize(direction)));
 				}
 				image->set(nowPixel, j, i);
-				//Ray nowRay = Ray(origin, normalize(direction));
-				//image->set(work(nowRay), j, i);
-				//if (config->displayOn) RenderView::imgDisplay(image, j, i);
 			}
 	}
+	cerr << "Thread " << s << " ended" << endl;
 }
 
 Color RayTracer::objWork(const Ray& r, Vector interceptP, double co, Object* selected) {
@@ -166,10 +163,12 @@ Color RayTracer::objWork(const Ray& r, Vector interceptP, double co, Object* sel
 	if (selected->environmentFactor > EPS) {
 		ans += selected->environmentFactor * selected->getColor(interceptP);
 	}
-	if (config->photonMapping)
+
+	if (config->photonMapping) 
 		ans += PhotonMapper::photonColor(interceptP);
 	if (config->causticMapping)
 		ans += CausticMapper::photonColor(interceptP);
+
 	for (vector<Light*>::const_iterator i = lights.begin(); i != lights.end(); i++) {
 		if ((*i)->type == "PointLight") {
 			if (selected->diffuseFactor + selected->specularFactor < EPS) continue;
@@ -231,6 +230,26 @@ Color RayTracer::objWork(const Ray& r, Vector interceptP, double co, Object* sel
 		}
 	}
 	if (selected->refractFactor > EPS) {
+		
+		double nInv = 1.0f / selected->refractN;
+		double cosI = -dot(normal, r.direction);
+		if (cosI > 0) {
+			double cosT2 = 1.0f - nInv * nInv * (1.0f - cosI * cosI);
+			if (cosT2 > 0.0f) {
+				Vector T = (nInv * r.direction) + (nInv * cosI - sqrt(cosT2)) * normal;
+				Ray refractRay(interceptP + T * EPS, T);
+				ans += selected->refractFactor * refractOutWork(refractRay, co * selected->refractFactor, selected);
+			}
+		} else {
+			double cosT2 = 1.0f - selected->refractN * selected->refractN * (1.0f - cosI * cosI);
+			if (cosT2 > 0.0f) {
+				Vector T = (selected->refractN * r.direction) + (sqrt(cosT2) + selected->refractN * cosI) * normal;
+				Ray refractRay(interceptP + T * EPS, T);
+				ans += selected->refractFactor * work(refractRay, co * selected->refractFactor);
+			}
+		}
+		
+		/*
 		double nInv = 1.0f / selected->refractN;
 		double cosI = -dot(normal, r.direction);
 		if (cosI < -EPS) 
@@ -241,22 +260,27 @@ Color RayTracer::objWork(const Ray& r, Vector interceptP, double co, Object* sel
 			Ray refractRay(interceptP + T * EPS, T);
 			ans += selected->refractFactor * refractOutWork(refractRay, co * selected->refractFactor);
 		}
+		*/
 	}
 	return regular(ans);
 }
 
-Color RayTracer::refractOutWork(const Ray &r, double co) {
+Color RayTracer::refractOutWork(const Ray &r, double co, Object *from) {
 	Vector totCrossPoint;
 	Object *selected = nullptr;
 	Light *crossLight = nullptr;
 	int times = 0;
 	Ray nowR = r;
-	double dist = 0.0f;
-	while (times <= 100) { //parameter's misery
+	double dco = 1.0f;
+	while (times <= 10) { //parameter's misery
 		if (getCrossedObj(nowR, totCrossPoint, selected, crossLight) && (selected)) {
 			Vector normal;
 			selected->getNormal(totCrossPoint, normal);
-			dist += getDistance(nowR.origin, totCrossPoint);
+			dco *= exp(-getDistance(nowR.origin, totCrossPoint) * selected->beerConst);
+			if (co * dco < config->limitCoefficient) return Color(0.0f, 0.0f, 0.0f);
+			if (selected != from) { // trick: when no other border, use the object as the border
+				return dco * objWork(r, totCrossPoint, co * dco, selected);
+			}
 			double nInv = 1.0f / selected->refractN;
 			double cosI = -dot(normal, nowR.direction);
 			if (cosI > 0) {
@@ -264,14 +288,14 @@ Color RayTracer::refractOutWork(const Ray &r, double co) {
 				if (cosT2 > 0.0f) {
 					Vector T = (nInv * nowR.direction) + (nInv * cosI - sqrt(cosT2)) * normal;
 					Ray refractRay(totCrossPoint + T * EPS, T);
-					return exp(-dist * selected->beerConst) * work(refractRay, co);
+					return dco * work(refractRay, co * dco);
 				}
 			} else {
 				double cosT2 = 1.0f - selected->refractN * selected->refractN * (1.0f - cosI * cosI);
 				if (cosT2 > 0.0f) {
 					Vector T = (selected->refractN * nowR.direction) + (sqrt(cosT2) + selected->refractN * cosI) * normal;
 					Ray refractRay(totCrossPoint + T * EPS, T);
-					return exp(-dist * selected->beerConst) * work(refractRay, co);
+					return dco * work(refractRay, co * dco);
 				}
 			}
 			++times;

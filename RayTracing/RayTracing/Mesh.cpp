@@ -34,7 +34,7 @@ Mesh::Mesh(Vector _normal, vector<Vector> *_points, int _tot, Color _color, bool
 		N = _normal; // fake normal vector
 	}
 	if (textured) {
-		calTextureVec(normal);
+		//calTextureVec(normal);
 		textureXVecLen = getLength(textureXVec),
 			textureYVecLen = getLength(textureYVec);
 		//textureXVecLen2 = textureXVecLen * textureXVecLen,

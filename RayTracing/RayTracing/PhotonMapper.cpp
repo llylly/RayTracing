@@ -226,6 +226,32 @@ bool PhotonMapper::objWork(Photon *p, Vector interceptP, Object *selected) {
 		return photonWork(p);
 	} else if (lucky <= (selected->specularFactor + selected->reflectFactor + selected->diffuseFactor + selected->refractFactor)) {
 		// use refract reflection
+
+		double nInv = 1.0f / selected->refractN;
+		double cosI = -dot(normal, p->direction);
+		if (cosI > 0) {
+			double cosT2 = 1.0f - nInv * nInv * (1.0f - cosI * cosI);
+			if (cosT2 > 0.0f) {
+				Vector T = (nInv * p->direction) + (nInv * cosI - sqrt(cosT2)) * normal;
+				p->origin = interceptP + T * EPS;
+				p->direction = T;
+				p->color = p->color * selected->getColor(interceptP);
+				Ray refractRay(interceptP + T * EPS, T);
+				return refractOutWork(p, selected);
+			}
+		} else {
+			double cosT2 = 1.0f - selected->refractN * selected->refractN * (1.0f - cosI * cosI);
+			if (cosT2 > 0.0f) {
+				Vector T = (selected->refractN * p->direction) + (sqrt(cosT2) + selected->refractN * cosI) * normal;
+				p->origin = interceptP + T * EPS;
+				p->direction = T;
+				p->color = p->color * selected->getColor(interceptP);
+				Ray refractRay(interceptP + T * EPS, T);
+				return photonWork(p);
+			}
+		}
+
+		/*
 		double nInv = 1.0f / selected->refractN;
 		double cosI = -dot(normal, p->direction);
 		if (cosI < -EPS) 
@@ -241,6 +267,7 @@ bool PhotonMapper::objWork(Photon *p, Vector interceptP, Object *selected) {
 		} else {
 			return false; // cannot refract in, discard
 		}
+		*/
 	} else { 
 		// absorbed
 		Vector normal;
@@ -251,7 +278,7 @@ bool PhotonMapper::objWork(Photon *p, Vector interceptP, Object *selected) {
 	}
 }
 
-bool PhotonMapper::refractOutWork(Photon *p) {
+bool PhotonMapper::refractOutWork(Photon *p, Object *from) {
 	Vector totCrossPoint;
 	Object *selected = nullptr;
 	int times = 0;
@@ -263,6 +290,9 @@ bool PhotonMapper::refractOutWork(Photon *p) {
 			selected->getNormal(totCrossPoint, normal);
 			double nInv = 1.0f / selected->refractN;
 			double cosI = -dot(normal, nowR->direction);
+			if (selected != from) { // trick: when Plane as bottom, directly use it
+				return objWork(nowR, totCrossPoint, selected);
+			}
 			if (cosI > 0) {
 				double cosT2 = 1.0f - nInv * nInv * (1.0f - cosI * cosI);
 				if (cosT2 > 0.0f) {

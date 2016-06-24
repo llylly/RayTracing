@@ -58,14 +58,14 @@ bool Enclosure::intercept(const Enclosure &e, const Ray &r, Vector &p) {
 		if (nowD > 0.0f) {
 			nowp = r.origin + nowD * r.direction;
 			if (nowD < minD)
-				if ((nowp.y >= e.Ymin) && (nowp.y <= e.Ymax) && (nowp.z >= e.Zmin) && (nowp.z <= e.Zmax))
+				if ((nowp.y > e.Ymin - EPS) && (nowp.y < e.Ymax + EPS) && (nowp.z > e.Zmin - EPS) && (nowp.z < e.Zmax + EPS))
 					flag = true, minD = nowD;
 		}
 		nowD = (e.Xmax - r.origin.x) / r.direction.x;
 		if (nowD > 0.0f) {
 			nowp = r.origin + nowD * r.direction;
 			if (nowD < minD)
-				if ((nowp.y >= e.Ymin) && (nowp.y <= e.Ymax) && (nowp.z >= e.Zmin) && (nowp.z <= e.Zmax))
+				if ((nowp.y > e.Ymin - EPS) && (nowp.y < e.Ymax + EPS) && (nowp.z > e.Zmin - EPS) && (nowp.z < e.Zmax + EPS))
 					flag = true, minD = nowD;
 		}
 	}
@@ -74,14 +74,14 @@ bool Enclosure::intercept(const Enclosure &e, const Ray &r, Vector &p) {
 		if (nowD > 0.0f) {
 			nowp = r.origin + nowD * r.direction;
 			if (nowD < minD)
-				if ((nowp.x >= e.Xmin) && (nowp.x <= e.Xmax) && (nowp.z >= e.Zmin) && (nowp.z <= e.Zmax))
+				if ((nowp.x > e.Xmin - EPS) && (nowp.x <= e.Xmax + EPS) && (nowp.z > e.Zmin - EPS) && (nowp.z < e.Zmax + EPS))
 					flag = true, minD = nowD;
 		}
 		nowD = (e.Ymax - r.origin.y) / r.direction.y;
 		if (nowD > 0.0f) {
 			nowp = r.origin + nowD * r.direction;
 			if (nowD < minD)
-				if ((nowp.x >= e.Xmin) && (nowp.x <= e.Xmax) && (nowp.z >= e.Zmin) && (nowp.z <= e.Zmax))
+				if ((nowp.x > e.Xmin - EPS) && (nowp.x <= e.Xmax + EPS) && (nowp.z > e.Zmin - EPS) && (nowp.z < e.Zmax + EPS))
 					flag = true, minD = nowD;
 		}
 	}
@@ -90,14 +90,14 @@ bool Enclosure::intercept(const Enclosure &e, const Ray &r, Vector &p) {
 		if (nowD > 0.0f) {
 			nowp = r.origin + nowD * r.direction;
 			if (nowD < minD)
-				if ((nowp.x >= e.Xmin) && (nowp.x <= e.Xmax) && (nowp.y >= e.Ymin) && (nowp.y <= e.Ymax))
+				if ((nowp.x > e.Xmin - EPS) && (nowp.x < e.Xmax + EPS) && (nowp.y > e.Ymin - EPS) && (nowp.y < e.Ymax + EPS))
 					flag = true, minD = nowD;
 		}
 		nowD = (e.Zmax - r.origin.z) / r.direction.z;
 		if (nowD > 0.0f) {
 			nowp = r.origin + nowD * r.direction;
 			if (nowD < minD)
-				if ((nowp.x >= e.Xmin) && (nowp.x <= e.Xmax) && (nowp.y >= e.Ymin) && (nowp.y <= e.Ymax))
+				if ((nowp.x > e.Xmin - EPS) && (nowp.x < e.Xmax + EPS) && (nowp.y > e.Ymin - EPS) && (nowp.y < e.Ymax + EPS))
 					flag = true, minD = nowD;
 		}
 	}

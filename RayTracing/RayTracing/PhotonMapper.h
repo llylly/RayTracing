@@ -35,7 +35,7 @@ public:
 	static bool photonWork(Photon* p);
 	static bool objWork(Photon *p, Vector interceptP, Object* selected);
 	static bool getCrossedObj(Photon *p, Vector& crossPoint, Object *(&crossObj), Set *(&crossSet));
-	static bool refractOutWork(Photon *p);
+	static bool refractOutWork(Photon *p, Object *from);
 
 	static void buildPhotonTree(PhotonNode *p, int l, int r, Photon**);
 

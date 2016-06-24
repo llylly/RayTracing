@@ -102,7 +102,7 @@ int BMP::Height() {
 }
 
 Color BMP::getColor(double x, double y) {
-	x = x - long long(x), y = y - long long(y);
+	x = x - int(x), y = y - int(y);
 	x = (x < 0.0f)?-x:x, y = (y < 0.0f)?-y:y;
 	double rx = x * (width - 1), ry = y * (height - 1);
 	int ix = (int)rx, iy = (int)ry;
